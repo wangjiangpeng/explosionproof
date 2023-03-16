@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="170dp"
+    android:layout_height="90dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/explosion_item_gas_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="7dp" />
+
+    <TextView
+        android:id="@+id/explosion_item_gas_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/explosion_item_gas_icon"
+        android:textColor="#3285ff"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/explosion_item_gas_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explosion_item_gas_name"
+        android:layout_alignLeft="@+id/explosion_item_gas_name"
+        android:layout_marginTop="15dp"
+        android:textColor="#333333"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/explosion_item_gas_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/explosion_item_gas_value"
+        android:layout_toRightOf="@+id/explosion_item_gas_value"
+        android:layout_marginLeft="4dp"
+        android:textColor="#333333"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/explosion_item_gas_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/explosion_item_gas_value"
+        android:layout_alignLeft="@+id/explosion_item_gas_value"
+        android:layout_marginLeft="4dp"
+        android:textColor="#999999"
+        android:textSize="8sp" />
+
+</RelativeLayout>

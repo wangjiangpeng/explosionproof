@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">explosionproof</string>
+    <string name="app_name">安信通</string>
+
+
+    <string name="explpsion_normal">正常</string>
+    <string name="explpsion_mem">剩余内存%s</string>
+    <string name="explpsion_open_camera">开启录像</string>
+    <string name="explpsion_take_picture">快速拍照</string>
+    <string name="explpsion_fullscreen">全屏</string>
+    <string name="explpsion_oxygen">氧气</string>
+    <string name="explpsion_co">一氧化碳</string>
+    <string name="explpsion_flammable">可燃气</string>
+    <string name="explpsion_hydrogen">硫化氢</string>
+    <string name="explpsion_qualified">合格</string>
+    <string name="explpsion_comm">通讯</string>
+    <string name="explpsion_collect">气体采集</string>
+    <string name="explpsion_setting">设置</string>
 </resources>
