@@ -4,8 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import base.library.module.ModuleManager;
-
 /**
  * 任务池
  * <p/>
@@ -19,11 +17,7 @@ public class TaskService {
 
     public static TaskService getInstance() {
         if (sTaskService == null) {
-            synchronized (ModuleManager.class) {
-                if (sTaskService == null) {
-                    sTaskService = new TaskService();
-                }
-            }
+            sTaskService = new TaskService();
         }
         return sTaskService;
     }

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="170dp"
     android:layout_height="90dp"
-    android:orientation="vertical">
+    android:background="@drawable/round">
 
     <ImageView
         android:id="@+id/explosion_item_gas_icon"
