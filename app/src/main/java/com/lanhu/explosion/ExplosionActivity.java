@@ -1,6 +1,7 @@
 package com.lanhu.explosion;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,8 +26,9 @@ import java.util.Date;
 public class ExplosionActivity extends Activity implements TaskCallback {
 
     TextView mMemTV;
-    TextView mStatusTV;
-    GridView mGasGV;
+    TextView mStatusTV,mFullStatusTV;
+    GridView mGasGV, mFullGasGV;
+    View mSmallView, mFullView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +38,42 @@ public class ExplosionActivity extends Activity implements TaskCallback {
 
         mMemTV = findViewById(R.id.explosion_men);
         mStatusTV = findViewById(R.id.explosion_status);
+        mFullStatusTV = findViewById(R.id.explosion_full_status);
         mGasGV = findViewById(R.id.explosion_grid_gas);
+        mFullGasGV = findViewById(R.id.explosion_full_grid_gas);
+        mSmallView = findViewById(R.id.explosion_small_screen);
+        mFullView = findViewById(R.id.explosion_full_screen);
 
+        findViewById(R.id.explosion_fullscreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSmallView.setVisibility(View.GONE);
+                mFullView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        findViewById(R.id.explosion_fullscreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSmallView.setVisibility(View.GONE);
+                mFullView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        findViewById(R.id.explosion_full_small_screen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSmallView.setVisibility(View.VISIBLE);
+                mFullView.setVisibility(View.GONE);
+            }
+        });
+
+        findViewById(R.id.explosion_comm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ExplosionActivity.this, CommActivity.class));
+            }
+        });
     }
 
     @Override
@@ -47,6 +83,7 @@ public class ExplosionActivity extends Activity implements TaskCallback {
         String sizeStr = DataUtils.getSizeName(MemUtils.getAvailableSize("/data"));
         mMemTV.setText(getString(R.string.explosion_mem, sizeStr));
         mStatusTV.setText("正常");
+        mFullStatusTV.setText("正常");
 
         GasCollectTask task = TaskService.getInstance().getTask(GasCollectTask.class);
         task.setTaskCallback(this);
@@ -55,17 +92,19 @@ public class ExplosionActivity extends Activity implements TaskCallback {
 
     @Override
     public void onFinished(ATask task, Object result) {
-        if(task instanceof GasCollectTask){
-            GasInfo info = (GasInfo)result;
+        if (task instanceof GasCollectTask) {
+            GasInfo info = (GasInfo) result;
             mGasGV.setAdapter(new GasAdapter(info));
+
+            mFullGasGV.setAdapter(new GasAdapter(info));
         }
     }
 
-    private class GasAdapter extends BaseAdapter{
+    private class GasAdapter extends BaseAdapter {
 
         GasInfo info;
 
-        GasAdapter(GasInfo info){
+        GasAdapter(GasInfo info) {
             this.info = info;
         }
 
@@ -86,7 +125,7 @@ public class ExplosionActivity extends Activity implements TaskCallback {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
+            if (convertView == null) {
                 convertView = LayoutInflater.from(ExplosionActivity.this).inflate(R.layout.explosion_item_gas, parent, false);
             }
 
@@ -97,7 +136,7 @@ public class ExplosionActivity extends Activity implements TaskCallback {
             TextView data = convertView.findViewById(R.id.explosion_item_gas_date);
 
             GasInfo.Item item = getItem(position);
-            switch(item.type){
+            switch (item.type) {
                 case GasInfo.TYPE_OXYGEN:
                     icon.setImageResource(R.mipmap.oxygen);
                     name.setText(R.string.explosion_hydrogen);
@@ -117,11 +156,11 @@ public class ExplosionActivity extends Activity implements TaskCallback {
             }
 
             value.setText(String.valueOf(item.value));
-            if(item.status == GasInfo.STATUS_OK){
+            if (item.status == GasInfo.STATUS_OK) {
                 status.setText(R.string.explosion_qualified);
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             data.setText(dateFormat.format(new Date(item.time)));
 
             return convertView;

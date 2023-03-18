@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="600dp"
+    android:layout_height="300dp"
+    android:background="@drawable/half_round"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="47dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/comm_title"
+            android:textColor="#333333"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/comm_close"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="23dp"
+            android:background="@mipmap/close" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dbdbdb" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:background="#e9e9e9"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/comm_edit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/comm_voice"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/voice_tube"
+                android:background="@null" />
+
+            <EditText
+                android:id="@+id/comm_edit"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:background="#ffffff"/>
+
+            <TextView
+                android:id="@+id/comm_send"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:text="@string/comm_send"
+                android:textColor="#333333"
+                android:gravity="center"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/comm_speak_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/comm_keyboard"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/keyboard"
+                android:background="@null" />
+
+            <TextView
+                android:id="@+id/comm_speak_send"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:layout_marginRight="23dp"
+                android:text="@string/comm_speak"
+                android:background="#ffffff"
+                android:textColor="#333333"
+                android:gravity="center"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

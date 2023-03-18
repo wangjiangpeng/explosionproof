@@ -20,6 +20,12 @@
         <activity android:name=".ExplosionActivity"
             android:screenOrientation="landscape">
         </activity>
+
+        <activity android:name=".CommActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/CommDialog">
+        </activity>
     </application>
 
 </manifest>

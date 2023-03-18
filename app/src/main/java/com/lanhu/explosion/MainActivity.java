@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
         super.onResume();
 
         mUIHandler.removeMessages(0);
-        mUIHandler.sendEmptyMessageDelayed(0,3000);
+        mUIHandler.sendEmptyMessageDelayed(0,1000);
     }
 
     private class UIHandler extends Handler{
