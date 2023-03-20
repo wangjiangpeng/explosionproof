@@ -74,6 +74,13 @@ public class ExplosionActivity extends Activity implements TaskCallback {
                 startActivity(new Intent(ExplosionActivity.this, CommActivity.class));
             }
         });
+
+        findViewById(R.id.explosion_collect).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ExplosionActivity.this, GasCollectActivity.class));
+            }
+        });
     }
 
     @Override

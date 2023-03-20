@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="389dp"
+    android:layout_height="236dp"
+    android:gravity="center_horizontal"
+    android:background="@drawable/round">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:src="@drawable/round_blue"
+            android:layout_marginLeft="19dp"
+            android:layout_width="4dp"
+            android:layout_height="18dp"/>
+
+        <TextView
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginLeft="10dp"
+            android:text="@string/gas_collect_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/gas_collect_close"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="23dp"
+            android:background="@mipmap/close" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <com.lanhu.explosion.view.GasSeekBar
+            android:id="@+id/gas_collect_progress"
+            android:max="100"
+            android:layout_weight="4"
+            android:progress="50"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/gas_collect_read"
+        android:textSize="15sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/round_blue"
+        android:layout_width="98dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="28dp"/>
+
+</LinearLayout>

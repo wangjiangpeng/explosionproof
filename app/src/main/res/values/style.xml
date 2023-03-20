@@ -15,5 +15,10 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="progressBarHorizontal_indeter" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_color_horizontal</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
+    </style>
 
 </resources>

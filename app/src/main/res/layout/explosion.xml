@@ -51,8 +51,8 @@
 
                 <Button
                     android:id="@+id/explosion_open_camera"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:background="@mipmap/cycle_btn_bg" />
 
                 <TextView
@@ -61,7 +61,7 @@
                     android:layout_marginTop="10dp"
                     android:text="@string/explosion_open_camera"
                     android:textColor="#fefefe"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -75,8 +75,8 @@
 
                 <Button
                     android:id="@+id/explosion_take_picture"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:background="@mipmap/camera" />
 
                 <TextView
@@ -85,7 +85,7 @@
                     android:layout_marginTop="10dp"
                     android:text="@string/explosion_take_picture"
                     android:textColor="#fefefe"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -100,8 +100,8 @@
 
                 <Button
                     android:id="@+id/explosion_fullscreen"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:background="@mipmap/full_screen" />
 
                 <TextView
@@ -110,7 +110,7 @@
                     android:layout_marginTop="10dp"
                     android:text="@string/explosion_fullscreen"
                     android:textColor="#fefefe"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -214,8 +214,8 @@
 
             <Button
                 android:id="@+id/explosion_full_open_camera"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:background="@mipmap/cycle_btn_bg" />
 
             <TextView
@@ -224,7 +224,7 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/explosion_open_camera"
                 android:textColor="#fefefe"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -238,8 +238,8 @@
 
             <Button
                 android:id="@+id/explosion_full_take_picture"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:background="@mipmap/camera" />
 
             <TextView
@@ -248,7 +248,7 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/explosion_take_picture"
                 android:textColor="#fefefe"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -263,8 +263,8 @@
 
             <Button
                 android:id="@+id/explosion_full_small_screen"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:background="@mipmap/full_screen" />
 
             <TextView
@@ -273,7 +273,7 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/explosion_back"
                 android:textColor="#fefefe"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </RelativeLayout>
 

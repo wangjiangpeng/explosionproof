@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--设置图片的大小  -->
+    <item
+        android:width="30dp"
+        android:height="30dp">
+        <bitmap android:src="@mipmap/cycle" />
+    </item>
+
+    <item
+        android:gravity="center"
+        android:width="15dp"
+        android:height="15dp">
+        <bitmap android:src="@mipmap/finish" />
+    </item>
+
+
+</layer-list>

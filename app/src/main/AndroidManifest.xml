@@ -26,6 +26,11 @@
             android:screenOrientation="landscape"
             android:theme="@style/CommDialog">
         </activity>
+        <activity android:name=".GasCollectActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/CommDialog">
+        </activity>
     </application>
 
 </manifest>
