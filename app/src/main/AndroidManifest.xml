@@ -31,6 +31,10 @@
             android:screenOrientation="landscape"
             android:theme="@style/CommDialog">
         </activity>
+        <activity android:name=".SettingsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

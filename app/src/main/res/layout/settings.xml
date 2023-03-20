@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp">
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:src="@mipmap/settings_back" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/settings_title"
+                android:textColor="#333333"
+                android:textSize="24sp" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/round"
+            android:orientation="vertical"
+            android:paddingLeft="30dp">
+
+            <TextView
+                android:id="@+id/settings_picture"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_camera"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_picture"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/settings_video"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_video"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_video"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/settings_collect"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_collect"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_collect"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/round"
+            android:orientation="vertical"
+            android:paddingLeft="30dp">
+
+            <TextView
+                android:id="@+id/settings_base_info"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_setting"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_base_info"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/settings_server"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_communicate"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_server"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/settings_password"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_lock"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_passeord"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/settings_net"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_wifi"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_net"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/settings_common"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:drawableLeft="@mipmap/settings_common"
+                android:drawablePadding="20dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings_common"
+                android:textColor="#333333"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/line" />
+
+    <FrameLayout
+        android:id="@+id/settings_current_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+    </FrameLayout>
+
+</LinearLayout>
