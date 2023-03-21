@@ -55,6 +55,26 @@ public class RequestParam {
      */
     private long readTimeout;
 
+    private byte[] sendData;
+
+    private String sendFilePath;
+
+    public byte[] getSendData() {
+        return sendData;
+    }
+
+    public void setSendData(byte[] sendData) {
+        this.sendData = sendData;
+    }
+
+    public String getSendFilePath() {
+        return sendFilePath;
+    }
+
+    public void setSendFilePath(String sendFilePath) {
+        this.sendFilePath = sendFilePath;
+    }
+
     private Context context;
 
     public String getUrl() {

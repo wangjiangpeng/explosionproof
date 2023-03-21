@@ -42,6 +42,10 @@ public class PictureView extends SettingsBaseView {
 
     private class PictureAdapter extends BaseAdapter{
 
+        PictureAdapter(){
+
+        }
+
         @Override
         public int getCount() {
             return 0;

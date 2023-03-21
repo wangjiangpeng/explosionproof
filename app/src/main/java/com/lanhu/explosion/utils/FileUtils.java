@@ -5,6 +5,6 @@ import android.content.Context;
 public class FileUtils {
 
     public static String getPicturePath(Context context){
-        context.getFileStreamPath();
+        return context.getFileStreamPath("picture").getAbsolutePath();
     }
 }

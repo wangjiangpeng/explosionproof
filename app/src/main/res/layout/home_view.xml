@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextureView
+        android:id="@+id/home_full_grid_gas_tv"
+        android:layout_width="1px"
+        android:layout_height="1px"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:background="@mipmap/explosion_bg">
+
+        <TextView
+            android:id="@+id/home_view_men"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="37dp"
+            android:layout_marginTop="25dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/home_view_status"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="17dp"
+            android:layout_marginRight="22dp"
+            android:background="@drawable/round_btn"
+            android:gravity="center"
+            android:textColor="#3285ff"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="33dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/home_view_open_camera"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@mipmap/cycle_btn_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/explosion_open_camera"
+                android:textColor="#fefefe"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/home_view_take_picture"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@mipmap/camera" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/explosion_take_picture"
+                android:textColor="#fefefe"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="44dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/home_view_fullscreen"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@mipmap/full_screen" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/explosion_fullscreen"
+                android:textColor="#fefefe"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <GridView
+            android:id="@+id/home_view_grid_gas"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:horizontalSpacing="10dp"
+            android:numColumns="4"></GridView>
+
+        <LinearLayout
+            android:layout_width="165dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/home_view_comm"
+                android:layout_width="50dp"
+                android:layout_height="62dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:drawableTop="@drawable/comm_dw"
+                android:gravity="center_horizontal"
+                android:text="@string/explosion_comm"
+                android:textColor="#999999"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/home_view_collect"
+                android:layout_width="50dp"
+                android:layout_height="62dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:drawableTop="@drawable/collect_dw"
+                android:gravity="center_horizontal"
+                android:text="@string/explosion_collect"
+                android:textColor="#999999"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/home_view_setting"
+                android:layout_width="50dp"
+                android:layout_height="62dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:drawableTop="@drawable/setting_dw"
+                android:gravity="center_horizontal"
+                android:text="@string/explosion_setting"
+                android:textColor="#999999"
+                android:textSize="9sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
