@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.lanhu.explosion.task.ATask;
+import com.lanhu.explosion.task.impl.GasCollectTask;
+import com.lanhu.explosion.task.impl.GasStandardTask;
+
 import java.lang.ref.WeakReference;
 
 
@@ -20,8 +24,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 
         mUIHandler = new UIHandler(this);
-    }
 
+        ATask task = new GasStandardTask();
+        task.execute();
+    }
 
     @Override
     protected void onResume() {

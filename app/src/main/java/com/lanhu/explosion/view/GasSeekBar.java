@@ -27,7 +27,10 @@ public class GasSeekBar extends SeekBar {
     }
 
     private void init(){
+        setThumb(getResources().getDrawable(R.drawable.cycle_prepare));
         setProgressDrawable(getResources().getDrawable(R.drawable.progress_color_horizontal));
+        //setThumbOffset(0);
+        setPadding(20, 0, 20, 0);
 
         setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override

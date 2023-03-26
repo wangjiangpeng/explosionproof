@@ -12,6 +12,7 @@
     <string name="explosion_burn_gas">可燃气</string>
     <string name="explosion_hydrogen">硫化氢</string>
     <string name="explosion_qualified">合格</string>
+    <string name="explosion_warn">警告</string>
     <string name="explosion_comm">通讯</string>
     <string name="explosion_collect">气体采集</string>
     <string name="explosion_setting">设置</string>
@@ -28,6 +29,7 @@
     <string name="gas_collect_collecting">采集中</string>
     <string name="gas_collect_finish">采集完成</string>
     <string name="gas_collect_finished">已完成</string>
+    <string name="gas_collect_err">采集失败</string>
 
     <string name="settings_title">设置</string>
     <string name="settings_picture">照片库</string>

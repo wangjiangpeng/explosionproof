@@ -83,12 +83,12 @@ public class HomeFullView extends RelativeLayout {
 
         @Override
         public int getCount() {
-            return info.list.size();
+            return 4;
         }
 
         @Override
-        public GasInfo.Item getItem(int position) {
-            return info.list.get(position);
+        public Object getItem(int position) {
+            return info;
         }
 
         @Override
@@ -108,33 +108,59 @@ public class HomeFullView extends RelativeLayout {
             TextView status = convertView.findViewById(R.id.explosion_item_gas_status);
             TextView data = convertView.findViewById(R.id.explosion_item_gas_date);
 
-            GasInfo.Item item = getItem(position);
-            switch (item.type) {
-                case GasInfo.TYPE_OXYGEN:
+            switch (position) {
+                case 0:
                     icon.setImageResource(R.mipmap.oxygen);
                     name.setText(R.string.explosion_hydrogen);
+                    value.setText(String.valueOf(info.O2));
+                    if (info.status_O2 == GasInfo.STATUS_OK) {
+                        status.setTextColor(getResources().getColor(R.color.green, null));
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
+                    }
                     break;
-                case GasInfo.TYPE_CO:
+                case 1:
                     icon.setImageResource(R.mipmap.co);
                     name.setText(R.string.explosion_co);
+                    value.setText(String.valueOf(info.CO));
+                    if (info.status_CO == GasInfo.STATUS_OK) {
+                        status.setTextColor(getResources().getColor(R.color.green, null));
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
+                    }
                     break;
-                case GasInfo.TYPE_BURN_GAS:
+                case 2:
                     icon.setImageResource(R.mipmap.burn_gas);
                     name.setText(R.string.explosion_burn_gas);
+                    value.setText(String.valueOf(info.CH4));
+                    if (info.status_CH4 == GasInfo.STATUS_OK) {
+                        status.setTextColor(getResources().getColor(R.color.green, null));
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
+                    }
                     break;
-                case GasInfo.TYPE_HYDROGEN:
+                case 3:
                     icon.setImageResource(R.mipmap.hydrogen);
                     name.setText(R.string.explosion_hydrogen);
+                    value.setText(String.valueOf(info.H2S));
+                    if (info.status_H2S == GasInfo.STATUS_OK) {
+                        status.setTextColor(getResources().getColor(R.color.green, null));
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
+                    }
                     break;
-            }
-
-            value.setText(String.valueOf(item.value));
-            if (item.status == GasInfo.STATUS_OK) {
-                status.setText(R.string.explosion_qualified);
             }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            data.setText(dateFormat.format(new Date(item.time)));
+            data.setText(dateFormat.format(new Date(info.time)));
 
             return convertView;
         }

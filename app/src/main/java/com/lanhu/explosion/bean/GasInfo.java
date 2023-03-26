@@ -4,31 +4,29 @@ import java.util.ArrayList;
 
 public class GasInfo {
 
-    public static final int TYPE_OXYGEN = 0;
-    public static final int TYPE_CO = 1;
-    public static final int TYPE_BURN_GAS = 2;
-    public static final int TYPE_HYDROGEN = 3;
-
     public static final int STATUS_OK = 0;
-    public static final int STATUS_ERR = 1;
+    public static final int STATUS_WARN = 1;
 
-    public static final int QUALIFIED_MIN = 0;
+//    public static final float STANDARD_O2 = 20.9f;
+//    public static final int STANDARD_CO = 20.9f;
 
-    public ArrayList<Item> list = new ArrayList<>();
+    public int CO;
+    public int H2S;//硫化氢
+    public float O2;
+    public int CH4;//甲烷
 
-    public static class Item {
-        public int type;
-        public int value;
-        public int status;
-        public long time;
+    public int status_CO;
+    public int status_H2S;//硫化氢
+    public int status_O2;
+    public int status_CH4;//甲烷
 
-        public Item(int type, int value, int status, long time) {
-            this.type = type;
-            this.value = value;
-            this.status = status;
-            this.time = time;
-        }
 
+    public long time;
+
+    public boolean init;
+
+    public GasInfo(){
+        init = false;
     }
 
 }
