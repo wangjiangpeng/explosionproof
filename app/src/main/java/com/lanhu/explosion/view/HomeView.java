@@ -35,8 +35,6 @@ import com.lanhu.explosion.utils.DataUtils;
 import com.lanhu.explosion.utils.FileUtils;
 import com.lanhu.explosion.utils.MemUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,6 +45,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
     TextView mStatusTV;
     GridView mGasGV;
     TextureView sv;
+
+    GasInfo mInfo;
 
     public HomeView(Context context) {
         super(context);
@@ -109,8 +109,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
             }
         });
 
-        GasInfo info = new GasInfo();
-        mGasGV.setAdapter(new GasAdapter(info));
+        mInfo = GasInfo.sInfo;
+        mGasGV.setAdapter(new GasAdapter(mInfo));
     }
 
     @Override
@@ -132,8 +132,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
         } else if (task instanceof GasCollectTask) {
             if (result != null) {
-                GasInfo info = (GasInfo) result;
-                mGasGV.setAdapter(new GasAdapter(info));
+                mInfo = (GasInfo) result;
+                mGasGV.setAdapter(new GasAdapter(mInfo));
             }
         }
     }
@@ -177,83 +177,55 @@ public class HomeView extends LinearLayout implements TaskCallback {
                 case 0:
                     icon.setImageResource(R.mipmap.oxygen);
                     name.setText(R.string.explosion_hydrogen);
-                    if (info.init) {
-                        value.setText(String.valueOf(info.O2));
-                        if (info.status_O2 == GasInfo.STATUS_OK) {
-                            status.setTextColor(getResources().getColor(R.color.green, null));
-                            status.setText(R.string.explosion_qualified);
-                        } else {
-                            status.setTextColor(getResources().getColor(R.color.red, null));
-                            status.setText(R.string.explosion_warn);
-                        }
-                    } else {
-                        value.setText("--");
+                    value.setText(String.valueOf(info.O2));
+                    if (info.status_O2 == GasInfo.STATUS_OK) {
                         status.setTextColor(getResources().getColor(R.color.green, null));
-                        status.setText("--");
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
                     }
                     break;
                 case 1:
                     icon.setImageResource(R.mipmap.co);
                     name.setText(R.string.explosion_co);
-                    if (info.init) {
-                        value.setText(String.valueOf(info.CO));
-                        if (info.status_CO == GasInfo.STATUS_OK) {
-                            status.setTextColor(getResources().getColor(R.color.green, null));
-                            status.setText(R.string.explosion_qualified);
-                        } else {
-                            status.setTextColor(getResources().getColor(R.color.red, null));
-                            status.setText(R.string.explosion_warn);
-                        }
-                    } else {
-                        value.setText("--");
+                    value.setText(String.valueOf(info.CO));
+                    if (info.status_CO == GasInfo.STATUS_OK) {
                         status.setTextColor(getResources().getColor(R.color.green, null));
-                        status.setText("--");
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
                     }
                     break;
                 case 2:
                     icon.setImageResource(R.mipmap.burn_gas);
                     name.setText(R.string.explosion_burn_gas);
-                    if (info.init) {
-                        value.setText(String.valueOf(info.CH4));
-                        if (info.status_CH4 == GasInfo.STATUS_OK) {
-                            status.setTextColor(getResources().getColor(R.color.green, null));
-                            status.setText(R.string.explosion_qualified);
-                        } else {
-                            status.setTextColor(getResources().getColor(R.color.red, null));
-                            status.setText(R.string.explosion_warn);
-                        }
-                    } else {
-                        value.setText("--");
+                    value.setText(String.valueOf(info.CH4));
+                    if (info.status_CH4 == GasInfo.STATUS_OK) {
                         status.setTextColor(getResources().getColor(R.color.green, null));
-                        status.setText("--");
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
                     }
                     break;
                 case 3:
                     icon.setImageResource(R.mipmap.hydrogen);
                     name.setText(R.string.explosion_hydrogen);
-                    if (info.init) {
-                        value.setText(String.valueOf(info.H2S));
-                        if (info.status_H2S == GasInfo.STATUS_OK) {
-                            status.setTextColor(getResources().getColor(R.color.green, null));
-                            status.setText(R.string.explosion_qualified);
-                        } else {
-                            status.setTextColor(getResources().getColor(R.color.red, null));
-                            status.setText(R.string.explosion_warn);
-                        }
-                    } else {
-                        value.setText("--");
+                    value.setText(String.valueOf(info.H2S));
+                    if (info.status_H2S == GasInfo.STATUS_OK) {
                         status.setTextColor(getResources().getColor(R.color.green, null));
-                        status.setText("--");
+                        status.setText(R.string.explosion_qualified);
+                    } else {
+                        status.setTextColor(getResources().getColor(R.color.red, null));
+                        status.setText(R.string.explosion_warn);
                     }
                     break;
             }
 
-            if (info.init) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                data.setText(dateFormat.format(new Date(info.time)));
-            } else {
-                data.setText("0000-00-00 00:00:00");
-            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            data.setText(dateFormat.format(new Date(info.time)));
 
             return convertView;
         }

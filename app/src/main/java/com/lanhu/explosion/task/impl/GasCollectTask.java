@@ -5,6 +5,7 @@ import android.util.Log;
 import com.lanhu.explosion.bean.GasInfo;
 import com.lanhu.explosion.bean.GasStandardInfo;
 import com.lanhu.explosion.serial.SerialPort;
+import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.store.SharedPrefManager;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.utils.DataUtils;
@@ -32,32 +33,19 @@ public class GasCollectTask extends ATask<Integer> {
             publishProgress(50);
 
             byte[] buffer = requestDeviceData();
-
             if (buffer != null) {
                 GasInfo info = parseData(buffer);
                 if (info != null) {
-                    GasStandardInfo gsInfo = SharedPrefManager.getInstance().getGasStandard();
-                    if (info.CO > gsInfo.CO) {
-                        info.status_CO = GasInfo.STATUS_WARN;
-                    }
-                    if (info.H2S > gsInfo.H2S) {
-                        info.status_H2S = GasInfo.STATUS_WARN;
-                    }
-                    if (info.O2 < gsInfo.O2) {
-                        info.status_O2 = GasInfo.STATUS_WARN;
-                    }
-                    if (info.CH4 > gsInfo.CH4) {
-                        info.status_CH4 = GasInfo.STATUS_WARN;
-                    }
+                    GasStandardInfo.checkGas(GasStandardInfo.sInfo, info);
+                    DBManager.getInstance().insertGas(info);
+                    GasInfo.sInfo = info;
                 }
                 publishProgress(100);
                 return info;
             }
-            Log.e("GasCollectTask", "buffer null");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.e("GasCollectTask", "fail");
         publishProgress(100);
         return null;
     }
@@ -79,7 +67,6 @@ public class GasCollectTask extends ATask<Integer> {
                         int pos = 0;
                         while (true) {
                             byte[] data = port.receiver();
-                            Log.e("WJP", "data:" + DataUtils.bytesToString(data));
                             if (data != null) {
                                 System.arraycopy(data, 0, buffer, pos, data.length);
                                 pos += data.length;
@@ -110,11 +97,10 @@ public class GasCollectTask extends ATask<Integer> {
 
     private GasInfo parseData(byte[] buffer) {
         int index = 0;
-        Log.e("GasCollectTask", "parseData"+DataUtils.bytesToString(buffer));
+        Log.e("GasCollectTask", "parseData" + DataUtils.bytesToString(buffer));
         while (index < buffer.length - 10) {
             if (buffer[index] == (byte) 0xff && buffer[index + 1] == (byte) 0x86) {
                 GasInfo info = new GasInfo();
-                info.init = true;
                 info.CO = DataUtils.byteArrayToShort(buffer, index + 2);
                 info.H2S = DataUtils.byteArrayToShort(buffer, index + 4);
                 info.O2 = DataUtils.byteArrayToShort(buffer, index + 6);

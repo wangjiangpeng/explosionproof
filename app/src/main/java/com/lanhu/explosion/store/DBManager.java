@@ -7,13 +7,18 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lanhu.explosion.AApplication;
+import com.lanhu.explosion.bean.GasInfo;
+
+import java.util.ArrayList;
+
 public class DBManager {
 
     private static DBManager sDBManager;
 
-    public static DBManager getInstance(Context context){
+    public static DBManager getInstance(){
         if(sDBManager == null){
-            sDBManager = new DBManager(context.getApplicationContext());
+            sDBManager = new DBManager(AApplication.getInstance().getApplicationContext());
         }
         return sDBManager;
     }
@@ -40,8 +45,37 @@ public class DBManager {
     }
 
     public Cursor queryPicture(){
-        Cursor cursor = mDB.query(DBHelper.TABLE_PICTURE_NAME, DBHelper.TABLE_COLUMNS, null,null,null,null,null);
+        Cursor cursor = mDB.query(DBHelper.TABLE_PICTURE_NAME, DBHelper.TABLE_PICTURE_COLUMNS, null,null,null,null,null);
         return cursor;
+    }
+
+    public long insertGas(GasInfo info){
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.COLUMN_O2, info.O2);
+        cv.put(DBHelper.COLUMN_CO, info.CO);
+        cv.put(DBHelper.COLUMN_CH4, info.CH4);
+        cv.put(DBHelper.COLUMN_H2S, info.H2S);
+        cv.put(DBHelper.COLUMN_TIME, info.time);
+        long result = mDB.insert(DBHelper.TABLE_GAS_NAME, "", cv);
+        return result;
+    }
+
+    public ArrayList<GasInfo> queryGas(){
+        ArrayList<GasInfo> list = new ArrayList<>();
+        Cursor cursor = mDB.query(DBHelper.TABLE_GAS_NAME, DBHelper.TABLE_GAS_COLUMNS, null,null,null,null,null);
+        if(cursor != null){
+            while(cursor.moveToNext()){
+                GasInfo info = new GasInfo();
+                info.O2 = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_O2));
+                info.CO = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CO));
+                info.CH4 = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CH4));
+                info.H2S = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_H2S));
+                info.time = cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_TIME));
+                list.add(info);
+            }
+            cursor.close();
+        }
+        return list;
     }
 
     public static class DBHelper extends SQLiteOpenHelper {
@@ -51,13 +85,30 @@ public class DBManager {
         private static final int DATABASE_VERSION = 1;
 
         private static final String TABLE_PICTURE_NAME = "picture";
+        private static final String TABLE_GAS_NAME = "gas";
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_PATH = "path";
         public static final String COLUMN_STATUS = "status";
-        public static final String[] TABLE_COLUMNS = {
+
+        public static final String COLUMN_O2 = "O2";
+        public static final String COLUMN_CO = "CO";
+        public static final String COLUMN_CH4 = "CH4";
+        public static final String COLUMN_H2S = "H2S";
+        public static final String COLUMN_TIME = "time";
+
+        public static final String[] TABLE_PICTURE_COLUMNS = {
                 COLUMN_ID,
                 COLUMN_PATH,
                 COLUMN_STATUS
+        };
+
+        public static final String[] TABLE_GAS_COLUMNS = {
+                COLUMN_ID,
+                COLUMN_O2,
+                COLUMN_CO,
+                COLUMN_CH4,
+                COLUMN_H2S,
+                COLUMN_TIME
         };
 
         public DBHelper(Context context) {
@@ -79,7 +130,16 @@ public class DBManager {
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + COLUMN_PATH + " TEXT,"
                     + COLUMN_STATUS + " INTEGER)";
+            database.execSQL(sql);
 
+            sql = "CREATE TABLE IF NOT EXISTS "
+                    + TABLE_GAS_NAME + " ( "
+                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_O2 + " INTEGER,"
+                    + COLUMN_CO + " INTEGER,"
+                    + COLUMN_CH4 + " INTEGER,"
+                    + COLUMN_H2S + " INTEGER,"
+                    + COLUMN_TIME + " BIGINT)";
             database.execSQL(sql);
         }
         @Override

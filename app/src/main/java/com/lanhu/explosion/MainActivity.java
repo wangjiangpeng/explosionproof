@@ -7,13 +7,14 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.lanhu.explosion.task.ATask;
+import com.lanhu.explosion.task.TaskCallback;
 import com.lanhu.explosion.task.impl.GasCollectTask;
 import com.lanhu.explosion.task.impl.GasStandardTask;
 
 import java.lang.ref.WeakReference;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TaskCallback {
 
     UIHandler mUIHandler;
 
@@ -26,12 +27,21 @@ public class MainActivity extends Activity {
         mUIHandler = new UIHandler(this);
 
         ATask task = new GasStandardTask();
+        task.addTaskCallback(this);
         task.execute();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+//        mUIHandler.removeMessages(0);
+//        mUIHandler.sendEmptyMessageDelayed(0,1000);
+    }
+
+    @Override
+    public void onFinished(ATask task, Object result) {
+        finish();
 
         mUIHandler.removeMessages(0);
         mUIHandler.sendEmptyMessageDelayed(0,1000);

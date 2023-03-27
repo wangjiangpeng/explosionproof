@@ -60,7 +60,7 @@ public class SharedPrefManager {
         GasStandardInfo info = new GasStandardInfo();
         info.CO = Integer.valueOf(sp[0]);
         info.H2S = Integer.valueOf(sp[1]);
-        info.O2 = Float.valueOf(sp[2]);
+        info.O2 = Integer.valueOf(sp[2]);
         info.CH4 = Integer.valueOf(sp[3]);
         return info;
     }
