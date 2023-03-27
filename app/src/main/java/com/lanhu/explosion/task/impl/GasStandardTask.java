@@ -6,7 +6,7 @@ import com.lanhu.explosion.bean.GasStandardInfo;
 import com.lanhu.explosion.store.SharedPrefManager;
 import com.lanhu.explosion.task.ATask;
 
-public class GasStandardTask  extends ATask {
+public class GasStandardTask extends ATask {
 
     @Override
     protected Object doInBackground(Object... objs) {

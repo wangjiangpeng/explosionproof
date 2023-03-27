@@ -7,20 +7,20 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBWrapper {
+public class DBManager {
 
-    private static DBWrapper sDBWrapper;
+    private static DBManager sDBManager;
 
-    public static DBWrapper getInstance(Context context){
-        if(sDBWrapper == null){
-            sDBWrapper = new DBWrapper(context.getApplicationContext());
+    public static DBManager getInstance(Context context){
+        if(sDBManager == null){
+            sDBManager = new DBManager(context.getApplicationContext());
         }
-        return sDBWrapper;
+        return sDBManager;
     }
 
     private SQLiteDatabase mDB;
 
-    public DBWrapper(Context context){
+    public DBManager(Context context){
         mDB = new DBHelper(context).getWritableDatabase();
     }
 
