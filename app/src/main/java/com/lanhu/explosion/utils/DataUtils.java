@@ -1,5 +1,10 @@
 package com.lanhu.explosion.utils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class DataUtils {
 
     public static String getSizeName(long size) {
@@ -42,6 +47,35 @@ public class DataUtils {
     public static short byteArrayToShort(byte[] b, int index) {
         short value = (short) (b[index + 1] & 0xFF | (b[index] & 0xFF) << 8);
         return value;
+    }
+
+    public static String getDeviceID() {
+        BufferedReader bre = null;
+        File cpuInfo = new File("/proc/cpuinfo");
+        if (!cpuInfo.exists()) {
+            return null;
+        }
+        try {
+            bre = new BufferedReader(new FileReader(cpuInfo));
+            String lineInfo;
+            while ((lineInfo = bre.readLine()) != null) {
+                if (lineInfo.contains("Serial")) {
+                    String cpuSerial = lineInfo.substring(lineInfo.indexOf(":") + 2);
+                    return cpuSerial;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                bre.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return null;
     }
 
 }

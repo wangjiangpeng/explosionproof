@@ -25,6 +25,7 @@ public class GasStandardTask extends ATask {
         }
 
         // if request fail
+        /*
         {
             GasStandardInfo info = SharedPrefManager.getInstance().getGasStandard();
             if(info == null){
@@ -36,6 +37,7 @@ public class GasStandardTask extends ATask {
                 GasStandardInfo.sInfo = info;
             }
         }
+        */
 
         // first boot, from db read last time info
         if(GasInfo.sInfo.time == 0){

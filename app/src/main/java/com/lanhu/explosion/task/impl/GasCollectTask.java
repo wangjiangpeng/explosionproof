@@ -32,6 +32,7 @@ public class GasCollectTask extends ATask<Integer> {
             Thread.sleep(1000);
             publishProgress(50);
 
+            Log.e("GasCollectTask", "doInBackground" );
             byte[] buffer = requestDeviceData();
             if (buffer != null) {
                 GasInfo info = parseData(buffer);
@@ -74,16 +75,14 @@ public class GasCollectTask extends ATask<Integer> {
                         }
 
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
             };
-
             receiver.start();
             port.send(modeAsk);
             Thread.sleep(1000);
             port.send(test);
-            Thread.sleep(100000);
+            Thread.sleep(2000);
             port.close();
             receiver.join();
 

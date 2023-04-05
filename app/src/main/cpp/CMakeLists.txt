@@ -9,3 +9,13 @@ find_library(log-lib
 
 target_link_libraries(serial_port
                       ${log-lib} )
+
+add_library(rtmp
+        SHARED
+        rtmp.cpp)
+
+find_library(log-lib
+        log )
+
+target_link_libraries(rtmp
+        ${log-lib} )
