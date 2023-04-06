@@ -15,6 +15,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,7 @@ import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.task.TaskCallback;
 import com.lanhu.explosion.task.TaskService;
 import com.lanhu.explosion.task.impl.CameraPickureTask;
+import com.lanhu.explosion.task.impl.CameraRecordTask;
 import com.lanhu.explosion.task.impl.GasCollectTask;
 import com.lanhu.explosion.utils.DataUtils;
 import com.lanhu.explosion.utils.FileUtils;
@@ -47,6 +49,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
     TextureView sv;
 
     GasInfo mInfo;
+    Button mRecordBtn;
+    TextView mRecordTV;
 
     public HomeView(Context context) {
         super(context);
@@ -70,6 +74,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
         mStatusTV = findViewById(R.id.home_view_status);
         mGasGV = findViewById(R.id.home_view_grid_gas);
         sv = findViewById(R.id.home_full_grid_gas_tv);
+        mRecordBtn = findViewById(R.id.home_view_open_camera);
+        mRecordTV = findViewById(R.id.home_view_record_text);
 
         findViewById(R.id.home_view_fullscreen).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +112,20 @@ public class HomeView extends LinearLayout implements TaskCallback {
                 CameraPickureTask task = new CameraPickureTask();
                 task.addTaskCallback(HomeView.this);
                 task.execute(0, FileUtils.getPicturePath(getContext()), sv.getSurfaceTexture());
+            }
+        });
+
+        mRecordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
+                if(!task.isRuned()){
+                    task.reExecute();
+                    mRecordTV.setText(R.string.explosion_recording);
+                } else {
+                    task.stop();
+                    mRecordTV.setText(R.string.explosion_open_camera);
+                }
             }
         });
 

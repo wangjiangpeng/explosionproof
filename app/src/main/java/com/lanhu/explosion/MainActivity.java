@@ -47,7 +47,7 @@ public class MainActivity extends Activity implements TaskCallback {
 
     @Override
     public void onFinished(ATask task, Object result) {
-        finish();
+        //finish();
 
         mUIHandler.removeMessages(0);
         mUIHandler.sendEmptyMessageDelayed(0,1000);

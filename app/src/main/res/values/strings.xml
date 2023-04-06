@@ -5,6 +5,7 @@
     <string name="explosion_normal">正常</string>
     <string name="explosion_mem">剩余内存%s</string>
     <string name="explosion_open_camera">开启录像</string>
+    <string name="explosion_recording">正在录像</string>
     <string name="explosion_take_picture">快速拍照</string>
     <string name="explosion_fullscreen">全屏</string>
     <string name="explosion_oxygen">氧气</string>

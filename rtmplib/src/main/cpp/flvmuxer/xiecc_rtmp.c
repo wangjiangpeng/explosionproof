@@ -149,7 +149,6 @@ int rtmp_open_for_write(const char *url, uint32_t video_width, uint32_t video_he
     if (rtmp == NULL) {
         return RTMP_ERROR_OPEN_ALLOC;
     }
-    LOGD("rtmp_open_for_write1");
     RTMP_Init(rtmp);
     RTMPResult ret = RTMP_SetupURL(rtmp, url);
 
@@ -157,22 +156,18 @@ int rtmp_open_for_write(const char *url, uint32_t video_width, uint32_t video_he
         RTMP_Free(rtmp);
         return ret;
     }
-    LOGD("rtmp_open_for_write2");
     RTMP_EnableWrite(rtmp);
-
 
     ret = RTMP_Connect(rtmp, NULL);
     if (ret != RTMP_SUCCESS) {
         RTMP_Free(rtmp);
         return ret;
     }
-    LOGD("rtmp_open_for_write3");
     ret = RTMP_ConnectStream(rtmp, 0);
 
     if (ret != RTMP_SUCCESS) {
         return RTMP_ERROR_OPEN_CONNECT_STREAM;
     }
-    LOGD("rtmp_open_for_write4");
     video_config_ok = false;
     audio_config_ok = false;
 
