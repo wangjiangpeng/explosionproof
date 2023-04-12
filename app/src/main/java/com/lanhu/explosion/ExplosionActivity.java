@@ -34,7 +34,8 @@ public class ExplosionActivity extends Activity{
     FrameLayout mLayout;
 
     private static final String[] NEEDED_PERMISSIONS = new String[]{
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
     };
 
     @Override
@@ -45,7 +46,7 @@ public class ExplosionActivity extends Activity{
         mLayout = findViewById(R.id.explosion_layout);
         replaceHome();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!checkPermissions()) {
                 requestPermissions(NEEDED_PERMISSIONS, 0);
             }

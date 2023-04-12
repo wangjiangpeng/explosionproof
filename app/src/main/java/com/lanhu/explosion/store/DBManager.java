@@ -14,6 +14,10 @@ import java.util.ArrayList;
 
 public class DBManager {
 
+    public static final int STATUS_UNLOAD = 0;
+    public static final int STATUS_UPLOADING = 1;
+    public static final int STATUS_UPLOADED = 2;
+
     private static DBManager sDBManager;
 
     public static DBManager getInstance(){
@@ -36,16 +40,29 @@ public class DBManager {
         mDB.close();
     }
 
-    public long insertPicture(String path, int Status){
+    public long insertPicture(String path, int status){
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.COLUMN_PATH, path);
-        cv.put(DBHelper.COLUMN_STATUS, Status);
+        cv.put(DBHelper.COLUMN_STATUS, status);
         long result = mDB.insert(DBHelper.TABLE_PICTURE_NAME, "", cv);
         return result;
     }
 
     public Cursor queryPicture(){
         Cursor cursor = mDB.query(DBHelper.TABLE_PICTURE_NAME, DBHelper.TABLE_PICTURE_COLUMNS, null,null,null,null,null);
+        return cursor;
+    }
+
+    public long insertRecord(String path, int status){
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.COLUMN_PATH, path);
+        cv.put(DBHelper.COLUMN_STATUS, status);
+        long result = mDB.insert(DBHelper.TABLE_RECORD_NAME, "", cv);
+        return result;
+    }
+
+    public Cursor queryRecord(){
+        Cursor cursor = mDB.query(DBHelper.TABLE_RECORD_NAME, DBHelper.TABLE_RECORD_COLUMNS, null,null,null,null,null);
         return cursor;
     }
 
@@ -85,16 +102,18 @@ public class DBManager {
         private static final int DATABASE_VERSION = 1;
 
         private static final String TABLE_PICTURE_NAME = "picture";
-        private static final String TABLE_GAS_NAME = "gas";
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_PATH = "path";
         public static final String COLUMN_STATUS = "status";
 
+        private static final String TABLE_GAS_NAME = "gas";
         public static final String COLUMN_O2 = "O2";
         public static final String COLUMN_CO = "CO";
         public static final String COLUMN_CH4 = "CH4";
         public static final String COLUMN_H2S = "H2S";
         public static final String COLUMN_TIME = "time";
+
+        private static final String TABLE_RECORD_NAME = "record";
 
         public static final String[] TABLE_PICTURE_COLUMNS = {
                 COLUMN_ID,
@@ -109,6 +128,12 @@ public class DBManager {
                 COLUMN_CH4,
                 COLUMN_H2S,
                 COLUMN_TIME
+        };
+
+        public static final String[] TABLE_RECORD_COLUMNS = {
+                COLUMN_ID,
+                COLUMN_PATH,
+                COLUMN_STATUS
         };
 
         public DBHelper(Context context) {
@@ -140,6 +165,13 @@ public class DBManager {
                     + COLUMN_CH4 + " INTEGER,"
                     + COLUMN_H2S + " INTEGER,"
                     + COLUMN_TIME + " BIGINT)";
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS "
+                    + TABLE_RECORD_NAME + " ( "
+                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_PATH + " TEXT,"
+                    + COLUMN_STATUS + " INTEGER)";
             database.execSQL(sql);
         }
         @Override

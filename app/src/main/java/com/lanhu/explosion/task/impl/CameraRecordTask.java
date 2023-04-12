@@ -1,23 +1,16 @@
 package com.lanhu.explosion.task.impl;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.ImageFormat;
-import android.graphics.SurfaceTexture;
-import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.media.MediaRecorder;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
 import android.util.Log;
 import android.view.Surface;
 
 import com.io.rtmp.RTMPManager;
 import com.lanhu.explosion.AApplication;
+import com.lanhu.explosion.encoder.MediaWrapper;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.utils.FileUtils;
 
@@ -27,10 +20,10 @@ import java.util.List;
 
 public class CameraRecordTask extends ATask {
 
-    private String url = "rtmp://192.168.10.29/live/7";
+    private String url = "rtmp://192.168.10.29/live/1";
 
-    private int width = 320;
-    private int height = 240;
+    private int width = 640;
+    private int height = 480;
 
     private RTMPManager mRTMPManager;
     MediaRecorder mRecorder;
@@ -38,6 +31,8 @@ public class CameraRecordTask extends ATask {
     private CameraCaptureSession mCaptureSession;
 
     boolean isRuned = false;
+
+    MediaWrapper mMediaWrapper;
 
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
@@ -101,6 +96,7 @@ public class CameraRecordTask extends ATask {
     @Override
     protected Object doInBackground(Object... objs) {
         Log.e("WJP", "CameraRecordTask");
+        /*
         try {
             mRTMPManager = RTMPManager.getInstance();
             mRTMPManager.setUrl(url);
@@ -143,11 +139,24 @@ public class CameraRecordTask extends ATask {
         }
 
         isRuned = true;
+
+         */
+
+        File mediaFile = FileUtils.getMediaFilePath(AApplication.getInstance());
+
+        mMediaWrapper = new MediaWrapper();
+        mMediaWrapper.setMediaPath(mediaFile.getAbsolutePath());
+        mMediaWrapper.setRtmpUrl(url);
+        mMediaWrapper.setVideoSize(width, height);
+        mMediaWrapper.startRecord();
+        isRuned = true;
         return null;
     }
 
     public void stop() {
         isRuned = false;
+        mMediaWrapper.stopRecord();
+        /*
         try {
             mRTMPManager.stop();
         } catch (Exception e) {
@@ -165,6 +174,7 @@ public class CameraRecordTask extends ATask {
         } catch (Exception e) {
             e.printStackTrace();
         }
+         */
     }
 
     public boolean isRuned(){
