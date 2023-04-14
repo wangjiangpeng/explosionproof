@@ -20,21 +20,19 @@ public class MediaWrapper {
     private String url;
     private int width, height;
 
-
-
     public MediaWrapper() {
 
     }
 
-    public void setMediaPath(String path){
+    public void setMediaPath(String path) {
         this.mediaPath = path;
     }
 
-    public void setRtmpUrl(String url){
+    public void setRtmpUrl(String url) {
         this.url = url;
     }
 
-    public void setVideoSize(int width, int height){
+    public void setVideoSize(int width, int height) {
         this.width = width;
         this.height = height;
     }
@@ -57,42 +55,14 @@ public class MediaWrapper {
             super.run();
 
             Log.e(TAG, "ReadThread start");
-            AudioEncoder audioEncoder = new AudioEncoder();
+            AbsEncoder audioEncoder = new AudioEncoder();
             audioEncoder.start();
-            MuxerThread muxerThread = new MuxerThread(audioEncoder);
-            muxerThread.start();
-            while (recording) {
-                audioEncoder.queueInputBuffer();
-            }
-            audioEncoder.endOfStream();
+            AbsEncoder videoEncoder = new VideoEncoder(0, width, height);
+            videoEncoder.start();
 
-            try {
-                muxerThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            audioEncoder.stop();
-            Log.e(TAG, "ReadThread stop");
-        }
-    }
-
-    public class MuxerThread extends Thread {
-
-        AudioEncoder mAudioEncoder;
-
-        MuxerThread(AudioEncoder audioEncoder){
-            mAudioEncoder = audioEncoder;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-
-            Log.e(TAG, "MuxerThread start");
             RTMPMuxer rtmpMuxer = new RTMPMuxer();
             int ret = rtmpMuxer.open(url, width, height);
-            Log.e(TAG, "rtmp ret:"+ret);
+            Log.e(TAG, "rtmp ret:" + ret);
 
             MediaMuxer mediaMuxer = null;
             try {
@@ -101,27 +71,72 @@ public class MediaWrapper {
                 e.printStackTrace();
             }
 
-            int audioTrack = mAudioEncoder.addTrack(mediaMuxer);
-            if(audioTrack == -1){
-                Log.e(TAG, "addTrack err");
+            boolean suc = audioEncoder.addTrack(mediaMuxer);
+            if (!suc) {
+                Log.e(TAG, "audioTrack err");
+                return;
+            }
+            suc = videoEncoder.addTrack(mediaMuxer);
+            if (!suc) {
+                Log.e(TAG, "videoTrack err");
                 return;
             }
 
             mediaMuxer.start();
-            while (true) {
-                if(!mAudioEncoder.isEnd()){
-                    mAudioEncoder.writeSampleData(audioTrack, mediaMuxer, rtmpMuxer);
-                }
-                if(mAudioEncoder.isEnd()){
-                    break;
-                }
+
+            MuxerThread audioThread = new MuxerThread(audioEncoder, mediaMuxer, rtmpMuxer);
+            audioThread.start();
+
+            MuxerThread videoThread = new MuxerThread(videoEncoder, mediaMuxer, rtmpMuxer);
+            videoThread.start();
+
+            while (recording) {
+                audioEncoder.queueInputBuffer();
+                // video do not queue, because it is auto queue
+            }
+            audioEncoder.endOfStream();
+            videoEncoder.endOfStream();
+
+            try {
+                audioThread.join();
+                videoThread.join();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (rtmpMuxer.isConnected()) {
+                rtmpMuxer.close();
             }
 
             mediaMuxer.stop();
             mediaMuxer.release();
 
-            if(rtmpMuxer.isConnected()) {
-                rtmpMuxer.close();
+            audioEncoder.stop();
+            videoEncoder.stop();
+            Log.e(TAG, "ReadThread stop");
+        }
+    }
+
+    public class MuxerThread extends Thread {
+
+        AbsEncoder mEncoder;
+        MediaMuxer mMediaMuxer;
+        RTMPMuxer mRtmpMuxer;
+
+        MuxerThread(AbsEncoder encoder, MediaMuxer mediaMuxer, RTMPMuxer rtmpMuxer) {
+            mEncoder = encoder;
+            mMediaMuxer = mediaMuxer;
+            mRtmpMuxer = rtmpMuxer;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+
+            Log.e(TAG, "MuxerThread start");
+
+            while (!mEncoder.isEnd()) {
+                mEncoder.writeSampleData(mMediaMuxer, mRtmpMuxer);
             }
             Log.e(TAG, "MuxerThread stop");
         }

@@ -339,6 +339,7 @@ RTMP_Init(RTMP *r)
   r->m_fAudioCodecs = 3191.0;
   r->m_fVideoCodecs = 252.0;
   r->Link.receiveTimeoutInMs = 10000;
+  r->Link.sendTimeoutInMs  = 3000;
   r->Link.swfAge = 30;
 }
 

@@ -31,7 +31,7 @@ public class RTMPManager {
 
     MediaCodec mMediaCodec;
     Surface mSurface;
-    RTMPMuxer mRTMPMuxer;
+   // RTMPMuxer mRTMPMuxer;
     String mUrl;
     int mWidth;
     int mHeight;
@@ -42,7 +42,7 @@ public class RTMPManager {
     boolean upload = false;
 
     private RTMPManager() {
-        mRTMPMuxer = new RTMPMuxer();
+       // mRTMPMuxer = new RTMPMuxer();
     }
 
     public void setUrl(String url) {

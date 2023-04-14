@@ -13,22 +13,22 @@ import com.io.rtmp.RTMPMuxer;
 
 import java.nio.ByteBuffer;
 
-public class AudioEncoder extends AbsEncoder{
+public class AudioEncoder extends AbsEncoder {
+
+    private static final String TAG = "AudioEncoder";
 
     private static final int SAMPLE_RATE = 44100;
     private static final int BIT_RATE = 64000;
 
-    MediaCodec mMediaCodec;
-    AudioRecord mAudioRecord;
-    byte[] buffer = new byte[1024];
-    MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
+    private MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
 
-    boolean end = false;
+    private AudioRecord mAudioRecord;
+    private byte[] buffer = new byte[1024];
+    private boolean end = false;
 
-    public AudioEncoder(){
+    public AudioEncoder() {
 
     }
-
 
     @Override
     public void start() {
@@ -72,14 +72,14 @@ public class AudioEncoder extends AbsEncoder{
     }
 
     @Override
-    public void writeSampleData(int trackIndex, MediaMuxer mediaMuxer, RTMPMuxer rtmpMuxer) {
+    public void writeSampleData(MediaMuxer mediaMuxer, RTMPMuxer rtmpMuxer) {
         int index = mMediaCodec.dequeueOutputBuffer(bufferInfo, 0);
         if (index >= 0) {
             if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             } else {
                 ByteBuffer buffer = mMediaCodec.getOutputBuffer(index);
                 bufferInfo.presentationTimeUs = getPTSUs();
-                mediaMuxer.writeSampleData(trackIndex, buffer, bufferInfo);
+                mediaMuxer.writeSampleData(track, buffer, bufferInfo);
                 prevOutputPTSUs = bufferInfo.presentationTimeUs;
 
                 if (rtmpMuxer.isConnected()) {
@@ -90,8 +90,8 @@ public class AudioEncoder extends AbsEncoder{
             }
 
             mMediaCodec.releaseOutputBuffer(index, false);
-            if(bufferInfo.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM){
-                Log.e("WJP", "BUFFER_FLAG_END_OF_STREAM");
+            if (bufferInfo.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM) {
+                Log.e(TAG, "BUFFER_FLAG_END_OF_STREAM");
                 end = true;
             }
         }
@@ -99,28 +99,12 @@ public class AudioEncoder extends AbsEncoder{
 
     @Override
     public void endOfStream() {
-        drain(null, 0);
+        while (!drain(null, 0)) ;
     }
 
     @Override
     public boolean isEnd() {
         return end;
-    }
-
-    @Override
-    public int addTrack(MediaMuxer mediaMuxer) {
-        MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-
-        int i = 0;
-        while(i++ < 10){
-            int index = mMediaCodec.dequeueOutputBuffer(bufferInfo, 100);
-            if(index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED){
-                return mediaMuxer.addTrack(mMediaCodec.getOutputFormat());
-            } else if(index >= 0){
-                mMediaCodec.releaseOutputBuffer(index, false);
-            }
-        }
-        return -1;
     }
 
     private boolean drain(byte[] buffer, int size) {
@@ -138,6 +122,5 @@ public class AudioEncoder extends AbsEncoder{
         }
         return false;
     }
-
 
 }
