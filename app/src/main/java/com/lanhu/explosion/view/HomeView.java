@@ -2,15 +2,9 @@ package com.lanhu.explosion.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +24,7 @@ import com.lanhu.explosion.bean.GasInfo;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.task.TaskCallback;
 import com.lanhu.explosion.task.TaskService;
-import com.lanhu.explosion.task.impl.CameraPickureTask;
+import com.lanhu.explosion.task.impl.CameraPictureTask;
 import com.lanhu.explosion.task.impl.CameraRecordTask;
 import com.lanhu.explosion.task.impl.GasCollectTask;
 import com.lanhu.explosion.utils.DataUtils;
@@ -109,7 +103,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
         findViewById(R.id.home_view_take_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CameraPickureTask task = new CameraPickureTask();
+                CameraPictureTask task = new CameraPictureTask();
                 task.addTaskCallback(HomeView.this);
                 task.execute(0, FileUtils.getPicturePath(getContext()), sv.getSurfaceTexture());
             }
@@ -146,7 +140,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
     @Override
     public void onFinished(ATask task, Object result) {
-        if (task instanceof CameraPickureTask) {
+        if (task instanceof CameraPictureTask) {
             boolean suc = (boolean) result;
             Log.e("WJP", "onFinished:" + result);
 

@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class CameraPickureTask extends ATask {
+public class CameraPictureTask extends ATask {
 
     Object mLock = new Object();
     boolean success = false;
