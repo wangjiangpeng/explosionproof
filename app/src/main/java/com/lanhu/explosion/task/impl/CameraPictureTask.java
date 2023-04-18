@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.util.Log;
 
 import com.lanhu.explosion.task.ATask;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 public class CameraPictureTask extends ATask {
 
+    private static final String TAG = "CameraPictureTask";
     Object mLock = new Object();
     boolean success = false;
     String mPath;
@@ -22,6 +24,7 @@ public class CameraPictureTask extends ATask {
     @Override
     protected Object doInBackground(Object... objs) {
         try {
+            Log.d(TAG, "start");
             int id = (int) objs[0];
             mPath = (String) objs[1];
             SurfaceTexture st = (SurfaceTexture) objs[2];
@@ -77,7 +80,7 @@ public class CameraPictureTask extends ATask {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        Log.d(TAG, "stop");
         return success;
     }
 
