@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="100">
 
     <TextureView
         android:id="@+id/home_full_grid_gas_tv"
         android:layout_width="1px"
-        android:layout_height="1px"/>
+        android:layout_height="1px" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="2dp"
         android:layout_marginRight="20dp"
-        android:layout_weight="1"
+        android:layout_weight="81"
         android:background="@mipmap/explosion_bg">
 
         <TextView
@@ -114,59 +115,84 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="87dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:orientation="horizontal">
+        android:layout_weight="13"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="100">
 
-        <GridView
-            android:id="@+id/home_view_grid_gas"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_view_gas"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="1"
-            android:horizontalSpacing="10dp"
-            android:numColumns="4"></GridView>
+            android:layout_weight="76" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_view_settings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="24" />
 
         <LinearLayout
-            android:layout_width="165dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="24"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <TextView
                 android:id="@+id/home_view_comm"
-                android:layout_width="50dp"
-                android:layout_height="62dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
-                android:drawableTop="@drawable/comm_dw"
+                android:layout_weight="30"
+                android:drawableTop="@mipmap/collect"
                 android:gravity="center_horizontal"
                 android:text="@string/explosion_comm"
                 android:textColor="#999999"
                 android:textSize="9sp" />
 
+            <View
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
             <TextView
                 android:id="@+id/home_view_collect"
-                android:layout_width="50dp"
-                android:layout_height="62dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
-                android:drawableTop="@drawable/collect_dw"
+                android:layout_weight="30"
+                android:drawableTop="@mipmap/collect"
                 android:gravity="center_horizontal"
                 android:text="@string/explosion_collect"
                 android:textColor="#999999"
                 android:textSize="9sp" />
 
+            <View
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
             <TextView
                 android:id="@+id/home_view_setting"
-                android:layout_width="50dp"
-                android:layout_height="62dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
-                android:drawableTop="@drawable/setting_dw"
+                android:layout_weight="30"
+                android:drawableTop="@mipmap/collect"
                 android:gravity="center_horizontal"
                 android:text="@string/explosion_setting"
                 android:textColor="#999999"
