@@ -142,63 +142,6 @@
             android:layout_height="match_parent"
             android:layout_weight="24" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="24"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/home_view_comm"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:layout_weight="30"
-                android:drawableTop="@mipmap/collect"
-                android:gravity="center_horizontal"
-                android:text="@string/explosion_comm"
-                android:textColor="#999999"
-                android:textSize="9sp" />
-
-            <View
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/home_view_collect"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:layout_weight="30"
-                android:drawableTop="@mipmap/collect"
-                android:gravity="center_horizontal"
-                android:text="@string/explosion_collect"
-                android:textColor="#999999"
-                android:textSize="9sp" />
-
-            <View
-                android:layout_weight="5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/home_view_setting"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:layout_weight="30"
-                android:drawableTop="@mipmap/collect"
-                android:gravity="center_horizontal"
-                android:text="@string/explosion_setting"
-                android:textColor="#999999"
-                android:textSize="9sp" />
-
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

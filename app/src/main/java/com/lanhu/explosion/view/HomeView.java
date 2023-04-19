@@ -89,27 +89,6 @@ public class HomeView extends LinearLayout implements TaskCallback {
             }
         });
 
-        findViewById(R.id.home_view_comm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, CommActivity.class));
-            }
-        });
-
-        findViewById(R.id.home_view_collect).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, GasCollectActivity.class));
-            }
-        });
-
-        findViewById(R.id.home_view_setting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, SettingsActivity.class));
-            }
-        });
-
         findViewById(R.id.home_view_take_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +118,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
         mGasRV.setAdapter(new GasRecyclerAdapter(mInfo));
         mGasRV.setLayoutManager(gasManager);
 
-        GridLayoutManager settingsManager = new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false);
+        GridLayoutManager settingsManager = new GridLayoutManager(getContext(), mSetItems.length, RecyclerView.VERTICAL, false);
         mSettingsRV.setAdapter(new SettingsRecyclerAdapter());
         mSettingsRV.setLayoutManager(settingsManager);
     }
