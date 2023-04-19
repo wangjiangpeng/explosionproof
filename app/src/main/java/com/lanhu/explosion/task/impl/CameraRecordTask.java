@@ -26,7 +26,7 @@ public class CameraRecordTask extends ATask {
     @Override
     protected Object doInBackground(Object... objs) {
         Log.e(TAG, "CameraRecordTask");
-        File mediaFile = FileUtils.getMediaFilePath(AApplication.getInstance());
+        File mediaFile = FileUtils.createMediaFile(AApplication.getInstance());
 
         mMediaWrapper = new MediaWrapper();
         mMediaWrapper.setMediaPath(mediaFile.getAbsolutePath());

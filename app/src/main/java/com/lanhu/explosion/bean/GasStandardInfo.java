@@ -1,6 +1,6 @@
 package com.lanhu.explosion.bean;
 
-public class GasStandardInfo {
+public class GasStandardInfo extends BaseInfo{
 
     public int CO;
     public int H2S;//硫化氢

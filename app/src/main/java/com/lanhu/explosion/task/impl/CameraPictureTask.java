@@ -7,7 +7,12 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.util.Log;
 
+import com.lanhu.explosion.AApplication;
+import com.lanhu.explosion.bean.BaseInfo;
+import com.lanhu.explosion.bean.PictureInfo;
+import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.task.ATask;
+import com.lanhu.explosion.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,16 +23,20 @@ public class CameraPictureTask extends ATask {
 
     private static final String TAG = "CameraPictureTask";
     Object mLock = new Object();
-    boolean success = false;
-    String mPath;
+    String savePath;
+
+    @Override
+    public boolean reset() {
+        savePath = null;
+        return super.reset();
+    }
 
     @Override
     protected Object doInBackground(Object... objs) {
         try {
             Log.d(TAG, "start");
             int id = (int) objs[0];
-            mPath = (String) objs[1];
-            SurfaceTexture st = (SurfaceTexture) objs[2];
+            SurfaceTexture st = (SurfaceTexture) objs[1];
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(id, cameraInfo);
             int facing = cameraInfo.facing;
@@ -52,7 +61,7 @@ public class CameraPictureTask extends ATask {
                             bytes = baos.toByteArray();
                         }
 
-                        success = savePicture(bytes);
+                        savePath = savePicture(bytes);
                         synchronized (mLock) {
                             mLock.notify();
                         }
@@ -76,31 +85,31 @@ public class CameraPictureTask extends ATask {
             camera.stopPreview();
             camera.release();
 
+            if (savePath != null) {
+                DBManager db = DBManager.getInstance();
+                db.insertPicture(new PictureInfo(savePath, BaseInfo.STATUS_UPLOAD_NO));
+                // todo upload service
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Log.d(TAG, "stop");
-        return success;
+        return savePath != null;
     }
 
-    protected boolean savePicture(byte[] data) {
+    protected String savePicture(byte[] data) {
         try {
-            File photoFile = new File(mPath);
-            if (!photoFile.exists()) {
-                photoFile.mkdirs();
-            }
-            File file = new File(photoFile, String.valueOf(System.currentTimeMillis()) + ".jpg");
+            File file = FileUtils.createPictureFile(AApplication.getInstance());
             FileOutputStream output = new FileOutputStream(file);
             output.write(data);
             output.close();
-
-            return true;
-
+            return file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
 }

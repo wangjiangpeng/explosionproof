@@ -1,6 +1,6 @@
 package com.lanhu.explosion.bean;
 
-public class GasInfo {
+public class GasInfo extends BaseInfo{
 
     public static final int STATUS_OK = 0;
     public static final int STATUS_WARN = 1;

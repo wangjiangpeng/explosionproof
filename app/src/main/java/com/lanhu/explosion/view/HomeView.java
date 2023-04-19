@@ -94,7 +94,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
             public void onClick(View v) {
                 CameraPictureTask task = new CameraPictureTask();
                 task.addTaskCallback(HomeView.this);
-                task.execute(0, FileUtils.getPicturePath(getContext()), sv.getSurfaceTexture());
+                task.reExecute(0, sv.getSurfaceTexture());
             }
         });
 

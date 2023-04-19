@@ -11,4 +11,9 @@
     <color name="line">#cbcbcb</color>
     <color name="green">#1DCE63</color>
     <color name="red">#ff0000</color>
+
+    <color name="setting_upload_gray">#999999</color>
+    <color name="setting_upload_blue">#3285ff</color>
+    <color name="setting_upload_read">#ff4646</color>
+    <color name="setting_upload_green">#25cb3d</color>
 </resources>

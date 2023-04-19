@@ -9,19 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lanhu.explosion.AApplication;
 import com.lanhu.explosion.bean.GasInfo;
+import com.lanhu.explosion.bean.PictureInfo;
 
 import java.util.ArrayList;
 
 public class DBManager {
 
-    public static final int STATUS_UNLOAD = 0;
-    public static final int STATUS_UPLOADING = 1;
-    public static final int STATUS_UPLOADED = 2;
-
     private static DBManager sDBManager;
 
-    public static DBManager getInstance(){
-        if(sDBManager == null){
+    public static DBManager getInstance() {
+        if (sDBManager == null) {
             sDBManager = new DBManager(AApplication.getInstance().getApplicationContext());
         }
         return sDBManager;
@@ -29,7 +26,7 @@ public class DBManager {
 
     private SQLiteDatabase mDB;
 
-    public DBManager(Context context){
+    public DBManager(Context context) {
         mDB = new DBHelper(context).getWritableDatabase();
     }
 
@@ -40,20 +37,40 @@ public class DBManager {
         mDB.close();
     }
 
-    public long insertPicture(String path, int status){
+    public synchronized long insertPicture(PictureInfo info) {
         ContentValues cv = new ContentValues();
-        cv.put(DBHelper.COLUMN_PATH, path);
-        cv.put(DBHelper.COLUMN_STATUS, status);
+        cv.put(DBHelper.COLUMN_PATH, info.getPath());
+        cv.put(DBHelper.COLUMN_STATUS, info.getUploadStatus());
         long result = mDB.insert(DBHelper.TABLE_PICTURE_NAME, "", cv);
         return result;
     }
 
-    public Cursor queryPicture(){
-        Cursor cursor = mDB.query(DBHelper.TABLE_PICTURE_NAME, DBHelper.TABLE_PICTURE_COLUMNS, null,null,null,null,null);
-        return cursor;
+    public synchronized ArrayList<PictureInfo> queryPicture() {
+        ArrayList<PictureInfo> list = new ArrayList<>();
+        Cursor cursor = mDB.query(DBHelper.TABLE_PICTURE_NAME, DBHelper.TABLE_PICTURE_COLUMNS, null, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                PictureInfo info = new PictureInfo();
+                info.setDbId(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_ID)));
+                info.setPath(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PATH)));
+                info.setUploadStatus(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_STATUS)));
+                list.add(info);
+            }
+            cursor.close();
+        }
+        return list;
     }
 
-    public long insertRecord(String path, int status){
+    public synchronized long updatePicture(PictureInfo info) {
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.COLUMN_ID, info.getDbId());
+        cv.put(DBHelper.COLUMN_PATH, info.getPath());
+        cv.put(DBHelper.COLUMN_STATUS, info.getUploadStatus());
+        long result = mDB.update(DBHelper.TABLE_PICTURE_NAME, cv, "id=?", new String[]{String.valueOf(info.getDbId())});
+        return result;
+    }
+
+    public synchronized long insertRecord(String path, int status) {
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.COLUMN_PATH, path);
         cv.put(DBHelper.COLUMN_STATUS, status);
@@ -61,12 +78,12 @@ public class DBManager {
         return result;
     }
 
-    public Cursor queryRecord(){
-        Cursor cursor = mDB.query(DBHelper.TABLE_RECORD_NAME, DBHelper.TABLE_RECORD_COLUMNS, null,null,null,null,null);
+    public synchronized Cursor queryRecord() {
+        Cursor cursor = mDB.query(DBHelper.TABLE_RECORD_NAME, DBHelper.TABLE_RECORD_COLUMNS, null, null, null, null, null);
         return cursor;
     }
 
-    public long insertGas(GasInfo info){
+    public synchronized long insertGas(GasInfo info) {
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.COLUMN_O2, info.O2);
         cv.put(DBHelper.COLUMN_CO, info.CO);
@@ -77,11 +94,11 @@ public class DBManager {
         return result;
     }
 
-    public ArrayList<GasInfo> queryGas(){
+    public synchronized ArrayList<GasInfo> queryGas() {
         ArrayList<GasInfo> list = new ArrayList<>();
-        Cursor cursor = mDB.query(DBHelper.TABLE_GAS_NAME, DBHelper.TABLE_GAS_COLUMNS, null,null,null,null,null);
-        if(cursor != null){
-            while(cursor.moveToNext()){
+        Cursor cursor = mDB.query(DBHelper.TABLE_GAS_NAME, DBHelper.TABLE_GAS_COLUMNS, null, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
                 GasInfo info = new GasInfo();
                 info.O2 = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_O2));
                 info.CO = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CO));
@@ -174,6 +191,7 @@ public class DBManager {
                     + COLUMN_STATUS + " INTEGER)";
             database.execSQL(sql);
         }
+
         @Override
         public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 

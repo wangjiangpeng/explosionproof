@@ -41,6 +41,9 @@
     <string name="settings_passeord">密码配置</string>
     <string name="settings_net">网络设置</string>
     <string name="settings_common">通用</string>
+    <string name="settings_upload_no">未上传</string>
+    <string name="settings_upload_ing">上传中</string>
+    <string name="settings_upload_ok">上传成功</string>
 
     <string name="settings_common_screen">屏幕</string>
     <string name="settings_common_screen_hint">在屏幕不操作的情况下，经过多长时间休眠</string>

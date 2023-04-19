@@ -9,32 +9,41 @@ import java.io.File;
 
 public class FileUtils {
 
-    public static String getPicturePath(Context context){
-        return context.getFileStreamPath("picture").getAbsolutePath();
+    private static File getPictureDir(Context context){
+        return context.getFileStreamPath("picture");
     }
 
-    public static File getRecordPath(Context context){
+    private static File getRecordDir(Context context){
         return context.getFileStreamPath("record");
     }
 
-    public static File getMediaFilePath(Context context){
-//        File recordPath = FileUtils.getRecordPath(context);
-//        if(!recordPath.exists()){
-//            recordPath.mkdirs();
-//        }
-//        //File videoFile = new File(recordPath, String.valueOf(System.currentTimeMillis()) + ".mp4");
-//        File videoFile = new File(recordPath, "test.mp4");
-//        if(videoFile.exists()){
-//            videoFile.delete();
-//        }
-
-        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "roof");
-        dir.mkdirs();
-        File videoFile = new File(dir, "test.mp4");
-        if(videoFile.exists()){
-            videoFile.delete();
+    public static File createMediaFile(Context context){
+        File dir = getRecordDir(context);
+        if(!dir.exists()){
+            dir.mkdirs();
         }
+        File f;
+        while(true){
+            f = new File(dir, String.valueOf(System.currentTimeMillis()) + ".mp4");
+            if(!f.exists()){
+                break;
+            }
+        }
+        return f;
+    }
 
-        return videoFile;
+    public static File createPictureFile(Context context){
+        File dir = getPictureDir(context);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        File f;
+        while(true){
+            f = new File(dir, String.valueOf(System.currentTimeMillis()) + ".jpg");
+            if(!f.exists()){
+               break;
+            }
+        }
+        return f;
     }
 }
