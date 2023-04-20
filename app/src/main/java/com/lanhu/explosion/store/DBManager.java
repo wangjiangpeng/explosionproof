@@ -100,12 +100,17 @@ public class DBManager {
         return list;
     }
 
-    public synchronized long updatePicture(RecordInfo info) {
+    public synchronized long updateRecord(RecordInfo info) {
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.COLUMN_ID, info.getDbId());
         cv.put(DBHelper.COLUMN_PATH, info.getPath());
         cv.put(DBHelper.COLUMN_STATUS, info.getUploadStatus());
         long result = mDB.update(DBHelper.TABLE_RECORD_NAME, cv, "id=?", new String[]{String.valueOf(info.getDbId())});
+        return result;
+    }
+
+    public synchronized long deleteRecord(RecordInfo info) {
+        long result = mDB.delete(DBHelper.TABLE_RECORD_NAME, "id=?",  new String[]{String.valueOf(info.getDbId())});
         return result;
     }
 

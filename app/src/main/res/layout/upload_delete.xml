@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/upload_delete_layout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="14"
+    android:visibility="gone"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="14"
+        android:orientation="horizontal">
+
+        <com.lanhu.explosion.widget.EqualLinearLayout
+            android:id="@+id/upload_select_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/upload"
+                android:gravity="center"
+                android:text="@string/settings_upload"
+                android:textColor="@color/gray"
+                android:textSize="13sp" />
+        </com.lanhu.explosion.widget.EqualLinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/settings_select_object"
+            android:textColor="@color/depth_gray"
+            android:textSize="24sp" />
+
+        <com.lanhu.explosion.widget.EqualLinearLayout
+            android:id="@+id/upload_select_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/delete"
+                android:gravity="center"
+                android:text="@string/settings_delete"
+                android:textColor="@color/gray"
+                android:textSize="13sp" />
+        </com.lanhu.explosion.widget.EqualLinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,8 +2,6 @@ package com.lanhu.explosion.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lanhu.explosion.R;
 import com.lanhu.explosion.bean.BaseInfo;
-import com.lanhu.explosion.bean.PictureInfo;
 import com.lanhu.explosion.bean.RecordInfo;
 import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.utils.DataUtils;
@@ -28,9 +25,14 @@ import java.util.ArrayList;
 
 public class RecordView  extends FrameLayout {
 
-    ArrayList<RecordInfo> mList;
+    private ArrayList<RecordInfo> mList;
+    private boolean isShowSelect = false;
+    private DBManager mDBManager;
 
-    RecyclerView mVideoRV;
+    private RecyclerView mVideoRV;
+    private View mSelectLayout;
+    private TextView mSelectTV;
+    private RecordAdapter mAdapter;
 
     public RecordView(Context context) {
         super(context);
@@ -49,27 +51,84 @@ public class RecordView  extends FrameLayout {
 
     protected void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.record_view, this, true);
-        mList = DBManager.getInstance().queryRecord();
+
         mVideoRV = findViewById(R.id.record_view_recycle);
+        mSelectLayout = findViewById(R.id.upload_delete_layout);
+        mSelectTV = findViewById(R.id.record_view_select);
+
+        mDBManager = DBManager.getInstance();
+        mList = mDBManager.queryRecord();
+
         GridLayoutManager manager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
-        mVideoRV.setAdapter(new PictureAdapter());
+        mVideoRV.setAdapter(mAdapter = new RecordAdapter());
         mVideoRV.setLayoutManager(manager);
+
+        findViewById(R.id.record_view_select).setOnClickListener(v -> {
+            isShowSelect = !isShowSelect;
+            if (isShowSelect) {
+                startSelect();
+            } else {
+                cancelSelect();
+            }
+        });
+
+        findViewById(R.id.upload_select_upload).setOnClickListener(v -> {
+            upload();
+        });
+
+        findViewById(R.id.upload_select_delete).setOnClickListener(v -> {
+            delete();
+        });
+    }
+
+    private void startSelect() {
+        mSelectTV.setText(R.string.settings_cancel);
+        mSelectLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void cancelSelect() {
+        mSelectTV.setText(R.string.settings_select);
+        mSelectLayout.setVisibility(View.GONE);
+
+        for (RecordInfo info : mList) {
+            info.setSelect(false);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void upload(){
+        // todo upload
+    }
+
+    private void delete(){
+        for (RecordInfo info : mList) {
+            if(info.isSelect()){
+                mDBManager.deleteRecord(info);
+                FileUtils.deleteFile(info.getPath());
+            }
+        }
+        mList = mDBManager.queryRecord();
+        mAdapter.notifyDataSetChanged();
     }
 
     private class VH extends RecyclerView.ViewHolder {
 
         ImageView icon;
+        ImageView select;
         TextView status;
+        View layout;
 
         public VH(View itemView) {
             super(itemView);
 
             icon = itemView.findViewById(R.id.record_item_icon);
+            select = itemView.findViewById(R.id.record_item_select);
             status = itemView.findViewById(R.id.record_item_status);
+            layout = itemView.findViewById(R.id.record_item_layout);
         }
     }
 
-    private class PictureAdapter extends RecyclerView.Adapter<VH> {
+    private class RecordAdapter extends RecyclerView.Adapter<VH> {
 
         @Override
         public VH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -95,6 +154,13 @@ public class RecordView  extends FrameLayout {
                     holder.icon.setImageResource(R.mipmap.folder_yellow);
                     break;
             }
+            holder.select.setVisibility((info.isSelect() & isShowSelect) ? View.VISIBLE : View.GONE);
+            holder.layout.setOnClickListener(v -> {
+                if(isShowSelect){
+                    info.setSelect(!info.isSelect());
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         @Override

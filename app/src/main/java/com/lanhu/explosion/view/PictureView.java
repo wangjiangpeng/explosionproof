@@ -56,7 +56,7 @@ public class PictureView extends FrameLayout {
     protected void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.picture_view, this, true);
         mPictureRV = findViewById(R.id.picture_view_recycle);
-        mSelectLayout = findViewById(R.id.picture_view_select_layout);
+        mSelectLayout = findViewById(R.id.upload_delete_layout);
         mSelectTV = findViewById(R.id.picture_view_select);
 
         mDBManager = DBManager.getInstance();
@@ -75,11 +75,11 @@ public class PictureView extends FrameLayout {
             }
         });
 
-        findViewById(R.id.picture_view_upload).setOnClickListener(v -> {
+        findViewById(R.id.upload_select_upload).setOnClickListener(v -> {
             upload();
         });
 
-        findViewById(R.id.picture_view_delete).setOnClickListener(v -> {
+        findViewById(R.id.upload_select_delete).setOnClickListener(v -> {
             delete();
         });
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/record_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -7,30 +8,41 @@
     android:paddingBottom="5dp"
     android:weightSum="100">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="63"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="25dp">
+        android:layout_weight="63">
 
         <ImageView
             android:id="@+id/record_item_icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:scaleType="fitXY" />
 
-        <TextView
-            android:id="@+id/record_item_status"
+        <ImageView
+            android:id="@+id/record_item_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/record_item_icon"
+            android:layout_alignTop="@id/record_item_icon"
+            android:layout_alignRight="@id/record_item_icon"
+            android:layout_alignBottom="@id/record_item_icon"
+            android:scaleType="centerInside"
+            android:src="@mipmap/right" />
+
+        <TextView
+            android:id="@+id/record_item_status"
+            android:layout_below="@+id/record_item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:textColor="@color/gray"
             android:textSize="11sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="0dp"

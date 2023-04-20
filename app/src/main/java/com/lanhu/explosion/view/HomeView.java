@@ -33,6 +33,7 @@ import com.lanhu.explosion.task.TaskService;
 import com.lanhu.explosion.task.impl.CameraPictureTask;
 import com.lanhu.explosion.task.impl.CameraRecordTask;
 import com.lanhu.explosion.task.impl.GasCollectTask;
+import com.lanhu.explosion.utils.ButtonUtils;
 import com.lanhu.explosion.utils.DataUtils;
 import com.lanhu.explosion.utils.FileUtils;
 import com.lanhu.explosion.utils.MemUtils;
@@ -96,23 +97,31 @@ public class HomeView extends LinearLayout implements TaskCallback {
         findViewById(R.id.home_view_take_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CameraPictureTask task = new CameraPictureTask();
-                task.addTaskCallback(HomeView.this);
-                task.reExecute(0, sv.getSurfaceTexture());
+                if(ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)){
+                    MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
+                } else {
+                    CameraPictureTask task = new CameraPictureTask();
+                    task.addTaskCallback(HomeView.this);
+                    task.reExecute(0, sv.getSurfaceTexture());
+                }
             }
         });
 
         mRecordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
-                if (!task.isRunning()) {
-                    task.addTaskCallback(HomeView.this);
-                    task.reExecute();
-                    mRecordTV.setText(R.string.explosion_recording);
+                if(ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)){
+                    MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
                 } else {
-                    task.stop();
-                    mRecordTV.setText(R.string.explosion_open_camera);
+                    CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
+                    if (!task.isRunning()) {
+                        task.addTaskCallback(HomeView.this);
+                        task.reExecute();
+                        mRecordTV.setText(R.string.explosion_recording);
+                    } else {
+                        task.stop();
+                        mRecordTV.setText(R.string.explosion_open_camera);
+                    }
                 }
             }
         });

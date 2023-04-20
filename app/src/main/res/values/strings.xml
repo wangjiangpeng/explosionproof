@@ -59,4 +59,5 @@
     <string name="toast_record_err">录像失败,请稍后再试</string>
     <string name="toast_take_picture_finish">拍照完成</string>
     <string name="toast_take_picture_err">拍照失败,请稍后再试</string>
+    <string name="toast_time_short">两次操作时间过短,请5秒后再试</string>
 </resources>

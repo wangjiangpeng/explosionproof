@@ -4,6 +4,8 @@ public class RecordInfo extends BaseInfo {
 
     private String path;
 
+    private boolean select;
+
     public RecordInfo() {
 
     }
@@ -25,5 +27,13 @@ public class RecordInfo extends BaseInfo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public boolean isSelect() {
+        return select;
+    }
+
+    public void setSelect(boolean select) {
+        this.select = select;
     }
 }
