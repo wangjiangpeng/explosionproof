@@ -14,7 +14,6 @@ import com.lanhu.explosion.view.RecordView;
 public class SettingsActivity extends Activity {
 
     private ViewGroup mCurrentLayout;
-    private TextView mTitleTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +21,6 @@ public class SettingsActivity extends Activity {
 
         setContentView(R.layout.settings);
         mCurrentLayout = findViewById(R.id.settings_current_layout);
-        mTitleTv = findViewById(R.id.settings_current_title);
 
         mCurrentLayout.addView(new PictureView(SettingsActivity.this));
 
@@ -36,24 +34,22 @@ public class SettingsActivity extends Activity {
         findViewById(R.id.settings_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceConnectView(R.string.settings_picture, new PictureView(SettingsActivity.this));
+                replaceConnectView(new PictureView(SettingsActivity.this));
             }
         });
-
 
         findViewById(R.id.settings_video).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceConnectView(R.string.settings_video, new RecordView(SettingsActivity.this));
+                replaceConnectView(new RecordView(SettingsActivity.this));
             }
         });
 
-        replaceConnectView(R.string.settings_picture, new PictureView(SettingsActivity.this));
+        replaceConnectView(new PictureView(SettingsActivity.this));
 
     }
 
-    private void replaceConnectView(int titleId, View view){
-        mTitleTv.setText(titleId);
+    private void replaceConnectView(View view){
         mCurrentLayout.removeAllViews();
         mCurrentLayout.addView(view);
     }

@@ -184,32 +184,10 @@
         android:layout_height="match_parent"
         android:background="@color/line" />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/settings_current_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="63"
-        android:orientation="vertical"
-        android:weightSum="100">
-
-        <TextView
-            android:id="@+id/settings_current_title"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8"
-            android:gravity="center"
-            android:textColor="#333333"
-            android:textSize="24sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/line" />
-
-        <FrameLayout
-            android:id="@+id/settings_current_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="92" />
-    </LinearLayout>
+        android:layout_weight="63"></FrameLayout>
 
 </LinearLayout>
