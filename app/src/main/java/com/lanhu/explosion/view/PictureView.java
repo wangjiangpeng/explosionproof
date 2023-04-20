@@ -25,14 +25,20 @@ import com.lanhu.explosion.R;
 import com.lanhu.explosion.bean.BaseInfo;
 import com.lanhu.explosion.bean.PictureInfo;
 import com.lanhu.explosion.store.DBManager;
+import com.lanhu.explosion.utils.BitmapUtils;
+import com.lanhu.explosion.utils.FileUtils;
 
 import java.util.ArrayList;
 
 public class PictureView extends FrameLayout {
 
-    RecyclerView mPictureRV;
-
+    private RecyclerView mPictureRV;
+    private View mSelectLayout;
+    private TextView mSelectTV;
+    private boolean isShowSelect = false;
+    private PictureAdapter mPictureAdapter;
     private ArrayList<PictureInfo> mList;
+    private DBManager mDBManager;
 
     public PictureView(Context context) {
         super(context);
@@ -50,24 +56,78 @@ public class PictureView extends FrameLayout {
     protected void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.picture_view, this, true);
         mPictureRV = findViewById(R.id.picture_view_recycle);
+        mSelectLayout = findViewById(R.id.picture_view_select_layout);
+        mSelectTV = findViewById(R.id.picture_view_select);
 
-        mList = DBManager.getInstance().queryPicture();
+        mDBManager = DBManager.getInstance();
+        mList = mDBManager.queryPicture();
 
         GridLayoutManager manager = new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false);
-        mPictureRV.setAdapter(new PictureAdapter());
+        mPictureRV.setAdapter(mPictureAdapter = new PictureAdapter());
         mPictureRV.setLayoutManager(manager);
+
+        findViewById(R.id.picture_view_select).setOnClickListener(v -> {
+            isShowSelect = !isShowSelect;
+            if (isShowSelect) {
+                startSelect();
+            } else {
+                cancelSelect();
+            }
+        });
+
+        findViewById(R.id.picture_view_upload).setOnClickListener(v -> {
+            upload();
+        });
+
+        findViewById(R.id.picture_view_delete).setOnClickListener(v -> {
+            delete();
+        });
+    }
+
+    private void startSelect() {
+        mSelectTV.setText(R.string.settings_cancel);
+        mSelectLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void cancelSelect() {
+        mSelectTV.setText(R.string.settings_select);
+        mSelectLayout.setVisibility(View.GONE);
+
+        for (PictureInfo info : mList) {
+            info.setSelect(false);
+        }
+        mPictureAdapter.notifyDataSetChanged();
+    }
+
+    private void upload(){
+        // todo upload
+    }
+
+    private void delete(){
+        for (PictureInfo info : mList) {
+            if(info.isSelect()){
+                mDBManager.deletePicture(info);
+                FileUtils.deleteFile(info.getPath());
+            }
+        }
+        mList = mDBManager.queryPicture();
+        mPictureAdapter.notifyDataSetChanged();
     }
 
     private class VH extends RecyclerView.ViewHolder {
 
         ImageView icon;
+        ImageView select;
         TextView status;
+        View layout;
 
         public VH(View itemView) {
             super(itemView);
 
             icon = itemView.findViewById(R.id.picture_item_icon);
+            select = itemView.findViewById(R.id.picture_item_select);
             status = itemView.findViewById(R.id.picture_item_status);
+            layout = itemView.findViewById(R.id.picture_item_layout);
         }
     }
 
@@ -83,7 +143,7 @@ public class PictureView extends FrameLayout {
         public void onBindViewHolder(VH holder, int position) {
             PictureInfo info = mList.get(position);
             Bitmap bitmap = BitmapFactory.decodeFile(info.getPath());
-            Bitmap rBitmap = getRoundCornerBitmap(bitmap, 5.0f);
+            Bitmap rBitmap = BitmapUtils.getRoundCornerBitmap(bitmap, 5.0f);
             holder.icon.setImageBitmap(rBitmap);
             switch (info.getUploadStatus()) {
                 case BaseInfo.STATUS_UPLOAD_NO:
@@ -101,35 +161,21 @@ public class PictureView extends FrameLayout {
                     holder.status.setText(R.string.settings_upload_ok);
                     break;
             }
+
+            holder.select.setVisibility((info.isSelect() & isShowSelect) ? View.VISIBLE : View.GONE);
+
+            holder.layout.setOnClickListener(v -> {
+                if(isShowSelect){
+                    info.setSelect(!info.isSelect());
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return mList.size();
         }
-    }
-
-    public static Bitmap getRoundCornerBitmap(Bitmap bitmap, float roundPX){
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        Bitmap bitmap2 = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap2);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, width, height);
-        final RectF rectF = new RectF(rect);
-
-        paint.setColor(color);
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawRoundRect(rectF, roundPX, roundPX, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return bitmap2;
     }
 
 }

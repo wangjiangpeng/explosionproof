@@ -3,6 +3,7 @@ package com.lanhu.explosion.bean;
 public class PictureInfo extends BaseInfo {
 
     private String path;
+    private boolean select;
 
     public PictureInfo() {
 
@@ -25,5 +26,13 @@ public class PictureInfo extends BaseInfo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public boolean isSelect() {
+        return select;
+    }
+
+    public void setSelect(boolean select) {
+        this.select = select;
     }
 }

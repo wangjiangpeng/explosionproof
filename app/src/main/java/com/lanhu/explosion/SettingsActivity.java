@@ -46,13 +46,11 @@ public class SettingsActivity extends Activity {
         });
 
         replaceConnectView(new PictureView(SettingsActivity.this));
-
     }
 
     private void replaceConnectView(View view){
         mCurrentLayout.removeAllViews();
         mCurrentLayout.addView(view);
     }
-
 
 }

@@ -44,6 +44,11 @@
     <string name="settings_upload_no">未上传</string>
     <string name="settings_upload_ing">上传中</string>
     <string name="settings_upload_ok">上传成功</string>
+    <string name="settings_select">选择</string>
+    <string name="settings_cancel">取消</string>
+    <string name="settings_upload">上传</string>
+    <string name="settings_delete">删除</string>
+    <string name="settings_select_object">选择项目</string>
 
     <string name="settings_common_screen">屏幕</string>
     <string name="settings_common_screen_hint">在屏幕不操作的情况下，经过多长时间休眠</string>

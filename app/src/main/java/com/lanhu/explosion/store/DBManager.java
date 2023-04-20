@@ -71,6 +71,11 @@ public class DBManager {
         return result;
     }
 
+    public synchronized long deletePicture(PictureInfo info) {
+        long result = mDB.delete(DBHelper.TABLE_PICTURE_NAME, "id=?",  new String[]{String.valueOf(info.getDbId())});
+        return result;
+    }
+
     public synchronized long insertRecord(RecordInfo info) {
         ContentValues cv = new ContentValues();
         cv.put(DBHelper.COLUMN_PATH, info.getPath());

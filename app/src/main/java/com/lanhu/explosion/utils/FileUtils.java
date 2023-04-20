@@ -46,4 +46,19 @@ public class FileUtils {
         }
         return f;
     }
+
+    public static void deleteFile(String path){
+        File file = new File(path);
+        if(file.exists()){
+            if(file.isFile()){
+                file.delete();
+            } else if(file.isDirectory()){
+                String[] fs = file.list();
+                for(String f : fs){
+                    deleteFile(f);
+                }
+            }
+        }
+    }
+
 }

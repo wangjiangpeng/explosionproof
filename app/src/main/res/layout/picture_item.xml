@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/picture_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -7,28 +8,47 @@
     android:paddingBottom="5dp"
     android:weightSum="100">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="88"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_weight="88">
 
-        <ImageView
-            android:id="@+id/picture_item_icon"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/picture_item_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textSize="11sp" />
+            <ImageView
+                android:id="@+id/picture_item_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/picture_item_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/picture_item_icon"
+                android:layout_alignTop="@id/picture_item_icon"
+                android:layout_alignRight="@id/picture_item_icon"
+                android:layout_alignBottom="@id/picture_item_icon"
+                android:src="@mipmap/right"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/picture_item_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/picture_item_icon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:textSize="11sp" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
     <View
         android:layout_width="0dp"
