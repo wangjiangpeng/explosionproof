@@ -3,6 +3,8 @@ package com.lanhu.explosion.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioDeviceInfo;
+import android.media.AudioManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +26,7 @@ import com.lanhu.explosion.GasCollectActivity;
 import com.lanhu.explosion.R;
 import com.lanhu.explosion.SettingsActivity;
 import com.lanhu.explosion.bean.GasInfo;
+import com.lanhu.explosion.misc.MToast;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.task.TaskCallback;
 import com.lanhu.explosion.task.TaskService;
@@ -102,7 +106,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
             @Override
             public void onClick(View v) {
                 CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
-                if (!task.isRuned()) {
+                if (!task.isRunning()) {
+                    task.addTaskCallback(HomeView.this);
                     task.reExecute();
                     mRecordTV.setText(R.string.explosion_recording);
                 } else {
@@ -138,7 +143,11 @@ public class HomeView extends LinearLayout implements TaskCallback {
     public void onFinished(ATask task, Object result) {
         if (task instanceof CameraPictureTask) {
             boolean suc = (boolean) result;
-            Log.e("WJP", "onFinished:" + result);
+            MToast.makeText(suc ? R.string.toast_take_picture_finish : R.string.toast_take_picture_err, Toast.LENGTH_LONG).show();
+
+        } else if (task instanceof CameraRecordTask) {
+            boolean suc = (boolean) result;
+            MToast.makeText(suc ? R.string.toast_record_finish : R.string.toast_record_err, Toast.LENGTH_LONG).show();
 
         } else if (task instanceof GasCollectTask) {
             if (result != null) {

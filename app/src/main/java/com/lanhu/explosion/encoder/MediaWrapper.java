@@ -1,31 +1,37 @@
 package com.lanhu.explosion.encoder;
 
-import android.media.MediaCodec;
 import android.media.MediaMuxer;
 import android.util.Log;
 
 import com.io.rtmp.RTMPMuxer;
-import com.lanhu.explosion.AApplication;
-import com.lanhu.explosion.utils.FileUtils;
-
-import java.io.File;
-import java.nio.ByteBuffer;
 
 public class MediaWrapper {
 
     private static final String TAG = "MediaWrapper";
 
     private ReadThread mReadThread;
-    private String mediaPath;
+    private String savePath;
     private String url;
     private int width, height;
+    private boolean isConnected = false;
+    private boolean isRunning = false;
+    private Object mLock = new Object();
 
-    public MediaWrapper() {
+    private static MediaWrapper sMediaWrapper;
+
+    public static MediaWrapper getInstance(){
+        if(sMediaWrapper == null){
+            sMediaWrapper = new MediaWrapper();
+        }
+        return sMediaWrapper;
+    }
+
+    private MediaWrapper() {
 
     }
 
-    public void setMediaPath(String path) {
-        this.mediaPath = path;
+    public void setSavePath(String path) {
+        this.savePath = path;
     }
 
     public void setRtmpUrl(String url) {
@@ -37,13 +43,40 @@ public class MediaWrapper {
         this.height = height;
     }
 
+    public boolean isConnected() {
+        return isConnected;
+    }
+
     public void startRecord() {
-        mReadThread = new ReadThread();
-        mReadThread.start();
+        if (mReadThread == null) {
+            isRunning = true;
+            isConnected = false;
+            mReadThread = new ReadThread();
+            mReadThread.start();
+        }
     }
 
     public void stopRecord() {
-        mReadThread.recording = false;
+        if (mReadThread != null) {
+            mReadThread.recording = false;
+            mReadThread = null;
+        }
+    }
+
+    public void waitStop() {
+        if (isRunning) {
+            synchronized (mLock) {
+                try {
+                    mLock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public class ReadThread extends Thread {
@@ -55,64 +88,67 @@ public class MediaWrapper {
             super.run();
 
             Log.e(TAG, "ReadThread start");
-            AbsEncoder audioEncoder = new AudioEncoder();
-            audioEncoder.start();
-            AbsEncoder videoEncoder = new VideoEncoder(0, width, height);
-            videoEncoder.start();
-
-            RTMPMuxer rtmpMuxer = new RTMPMuxer();
-            int ret = rtmpMuxer.open(url, width, height);
-            Log.e(TAG, "rtmp ret:" + ret);
-
-            MediaMuxer mediaMuxer = null;
             try {
-                mediaMuxer = new MediaMuxer(mediaPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                AbsEncoder audioEncoder = new AudioEncoder();
+                audioEncoder.start();
+                AbsEncoder videoEncoder = new VideoEncoder(0, width, height);
+                videoEncoder.start();
 
-            boolean suc = audioEncoder.addTrack(mediaMuxer);
-            if (!suc) {
-                Log.e(TAG, "audioTrack err");
-                return;
-            }
-            suc = videoEncoder.addTrack(mediaMuxer);
-            if (!suc) {
-                Log.e(TAG, "videoTrack err");
-                return;
-            }
+                RTMPMuxer rtmpMuxer = new RTMPMuxer();
+                int ret = rtmpMuxer.open(url, width, height);
+                isConnected = (ret >= 0);
+                Log.e(TAG, "rtmpMuxer open ret:" + ret);
 
-            mediaMuxer.start();
+                MediaMuxer mediaMuxer = null;
+                try {
+                    mediaMuxer = new MediaMuxer(savePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            MuxerThread audioThread = new MuxerThread(audioEncoder, mediaMuxer, rtmpMuxer);
-            audioThread.start();
+                boolean audioSuc = audioEncoder.addTrack(mediaMuxer);
+                if (!audioSuc) {
+                    Log.e(TAG, "audioTrack err");
+                    return;
+                }
+                boolean videoSuc = videoEncoder.addTrack(mediaMuxer);
+                if (!videoSuc) {
+                    Log.e(TAG, "videoTrack err");
+                    return;
+                }
 
-            MuxerThread videoThread = new MuxerThread(videoEncoder, mediaMuxer, rtmpMuxer);
-            videoThread.start();
+                mediaMuxer.start();
+                MuxerThread audioThread = new MuxerThread(audioEncoder, mediaMuxer, isConnected ? rtmpMuxer : null);
+                audioThread.start();
+                MuxerThread videoThread = new MuxerThread(videoEncoder, mediaMuxer, isConnected ? rtmpMuxer : null);
+                videoThread.start();
 
-            while (recording) {
-                audioEncoder.queueInputBuffer();
-                // video do not queue, because it is auto queue
-            }
-            audioEncoder.endOfStream();
-            videoEncoder.endOfStream();
+                while (recording) {
+                    audioEncoder.queueInputBuffer();
+                    // video do not queue, because it is auto queue
+                }
+                audioEncoder.endOfStream();
+                videoEncoder.endOfStream();
 
-            try {
                 audioThread.join();
                 videoThread.join();
+
+                if (isConnected) {
+                    rtmpMuxer.close();
+                }
+
+                mediaMuxer.stop();
+                mediaMuxer.release();
+                audioEncoder.stop();
+                videoEncoder.stop();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            if (rtmpMuxer.isConnected()) {
-                rtmpMuxer.close();
+            isRunning = false;
+            synchronized (mLock) {
+                mLock.notify();
             }
-
-            mediaMuxer.stop();
-            mediaMuxer.release();
-
-            audioEncoder.stop();
-            videoEncoder.stop();
             Log.e(TAG, "ReadThread stop");
         }
     }
@@ -133,12 +169,9 @@ public class MediaWrapper {
         public void run() {
             super.run();
 
-            Log.e(TAG, "MuxerThread start");
-
             while (!mEncoder.isEnd()) {
                 mEncoder.writeSampleData(mMediaMuxer, mRtmpMuxer);
             }
-            Log.e(TAG, "MuxerThread stop");
         }
     }
 

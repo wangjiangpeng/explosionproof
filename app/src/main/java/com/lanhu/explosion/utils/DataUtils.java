@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DataUtils {
 
@@ -76,6 +78,15 @@ public class DataUtils {
 
 
         return null;
+    }
+
+    public static String getTime(String format, long time) {
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(new Date(time));
+    }
+
+    public static String getTime(long time) {
+        return getTime("yyyy-MM-dd HH:mm:ss", time);
     }
 
 }

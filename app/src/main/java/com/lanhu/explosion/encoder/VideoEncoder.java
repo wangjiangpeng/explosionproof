@@ -175,7 +175,8 @@ public class VideoEncoder extends AbsEncoder {
                 bufferInfo.presentationTimeUs = getPTSUs();
                 mediaMuxer.writeSampleData(track, buffer, bufferInfo);
                 prevOutputPTSUs = bufferInfo.presentationTimeUs;
-                if (rtmpMuxer.isConnected()) {
+
+                if (rtmpMuxer != null && rtmpMuxer.isConnected()) {
                     byte[] outData = new byte[bufferInfo.size];
                     buffer.get(outData);
                     rtmpMuxer.writeVideo(outData, 0, outData.length, System.currentTimeMillis());

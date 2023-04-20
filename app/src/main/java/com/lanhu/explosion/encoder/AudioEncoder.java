@@ -64,7 +64,7 @@ public class AudioEncoder extends AbsEncoder {
 
     @Override
     public void queueInputBuffer() {
-        int len = mAudioRecord.read(buffer, 0, buffer.length);
+        int len = mAudioRecord.read(buffer, 0, buffer.length, AudioRecord.READ_NON_BLOCKING);
         if (len <= 0) {
             return;
         }
@@ -77,12 +77,13 @@ public class AudioEncoder extends AbsEncoder {
         if (index >= 0) {
             if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             } else {
+
                 ByteBuffer buffer = mMediaCodec.getOutputBuffer(index);
                 bufferInfo.presentationTimeUs = getPTSUs();
                 mediaMuxer.writeSampleData(track, buffer, bufferInfo);
                 prevOutputPTSUs = bufferInfo.presentationTimeUs;
 
-                if (rtmpMuxer.isConnected()) {
+                if (rtmpMuxer != null && rtmpMuxer.isConnected()) {
                     byte[] outData = new byte[bufferInfo.size];
                     buffer.get(outData);
                     rtmpMuxer.writeAudio(outData, 0, outData.length, System.currentTimeMillis());

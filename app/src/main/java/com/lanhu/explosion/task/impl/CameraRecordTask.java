@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.lanhu.explosion.AApplication;
+import com.lanhu.explosion.bean.BaseInfo;
+import com.lanhu.explosion.bean.PictureInfo;
+import com.lanhu.explosion.bean.RecordInfo;
 import com.lanhu.explosion.encoder.MediaWrapper;
+import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.utils.FileUtils;
 
@@ -18,8 +22,6 @@ public class CameraRecordTask extends ATask {
     private int width = 640;
     private int height = 480;
 
-    boolean isRuned = false;
-
     MediaWrapper mMediaWrapper;
 
     @SuppressLint("MissingPermission")
@@ -28,23 +30,25 @@ public class CameraRecordTask extends ATask {
         Log.e(TAG, "CameraRecordTask");
         File mediaFile = FileUtils.createMediaFile(AApplication.getInstance());
 
-        mMediaWrapper = new MediaWrapper();
-        mMediaWrapper.setMediaPath(mediaFile.getAbsolutePath());
-        mMediaWrapper.setRtmpUrl(url);
-        mMediaWrapper.setVideoSize(width, height);
-        mMediaWrapper.startRecord();
-        isRuned = true;
+        mMediaWrapper = MediaWrapper.getInstance();
+        if (mMediaWrapper.isRunning()) {
+            return false;
 
-        return null;
+        } else {
+            mMediaWrapper.setSavePath(mediaFile.getAbsolutePath());
+            mMediaWrapper.setRtmpUrl(url);
+            mMediaWrapper.setVideoSize(width, height);
+            mMediaWrapper.startRecord();
+            mMediaWrapper.waitStop();
+
+            DBManager db = DBManager.getInstance();
+            db.insertRecord(new RecordInfo(mediaFile.getAbsolutePath(), mMediaWrapper.isConnected() ? BaseInfo.STATUS_UPLOAD_OK : BaseInfo.STATUS_UPLOAD_NO));
+            return true;
+        }
     }
 
     public void stop() {
-        isRuned = false;
         mMediaWrapper.stopRecord();
-    }
-
-    public boolean isRuned(){
-        return isRuned;
     }
 
 }

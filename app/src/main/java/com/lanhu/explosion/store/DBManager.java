@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lanhu.explosion.AApplication;
 import com.lanhu.explosion.bean.GasInfo;
 import com.lanhu.explosion.bean.PictureInfo;
+import com.lanhu.explosion.bean.RecordInfo;
 
 import java.util.ArrayList;
 
@@ -70,17 +71,37 @@ public class DBManager {
         return result;
     }
 
-    public synchronized long insertRecord(String path, int status) {
+    public synchronized long insertRecord(RecordInfo info) {
         ContentValues cv = new ContentValues();
-        cv.put(DBHelper.COLUMN_PATH, path);
-        cv.put(DBHelper.COLUMN_STATUS, status);
+        cv.put(DBHelper.COLUMN_PATH, info.getPath());
+        cv.put(DBHelper.COLUMN_STATUS, info.getUploadStatus());
         long result = mDB.insert(DBHelper.TABLE_RECORD_NAME, "", cv);
         return result;
     }
 
-    public synchronized Cursor queryRecord() {
+    public synchronized ArrayList<RecordInfo> queryRecord() {
+        ArrayList<RecordInfo> list = new ArrayList<>();
         Cursor cursor = mDB.query(DBHelper.TABLE_RECORD_NAME, DBHelper.TABLE_RECORD_COLUMNS, null, null, null, null, null);
-        return cursor;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                RecordInfo info = new RecordInfo();
+                info.setDbId(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_ID)));
+                info.setPath(cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_PATH)));
+                info.setUploadStatus(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_STATUS)));
+                list.add(info);
+            }
+            cursor.close();
+        }
+        return list;
+    }
+
+    public synchronized long updatePicture(RecordInfo info) {
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.COLUMN_ID, info.getDbId());
+        cv.put(DBHelper.COLUMN_PATH, info.getPath());
+        cv.put(DBHelper.COLUMN_STATUS, info.getUploadStatus());
+        long result = mDB.update(DBHelper.TABLE_RECORD_NAME, cv, "id=?", new String[]{String.valueOf(info.getDbId())});
+        return result;
     }
 
     public synchronized long insertGas(GasInfo info) {

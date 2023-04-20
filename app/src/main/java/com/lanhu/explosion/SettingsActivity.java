@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.lanhu.explosion.view.CommonView;
 import com.lanhu.explosion.view.PictureView;
+import com.lanhu.explosion.view.RecordView;
 
 public class SettingsActivity extends Activity {
 
@@ -43,7 +44,7 @@ public class SettingsActivity extends Activity {
         findViewById(R.id.settings_video).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceConnectView(R.string.settings_video, new PictureView(SettingsActivity.this));
+                replaceConnectView(R.string.settings_video, new RecordView(SettingsActivity.this));
             }
         });
 
