@@ -46,7 +46,7 @@
         android:orientation="horizontal"
         android:weightSum="5">
 
-        <com.lanhu.explosion.view.GasSeekBar
+        <com.lanhu.explosion.widget.GasSeekBar
             android:id="@+id/gas_collect_progress"
             android:layout_width="0dp"
             android:thumbOffset="0dip"

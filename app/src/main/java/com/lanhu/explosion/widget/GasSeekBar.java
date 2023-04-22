@@ -1,4 +1,4 @@
-package com.lanhu.explosion.view;
+package com.lanhu.explosion.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

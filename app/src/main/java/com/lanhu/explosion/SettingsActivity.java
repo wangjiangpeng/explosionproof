@@ -2,12 +2,9 @@ package com.lanhu.explosion;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.lanhu.explosion.view.CommonView;
 import com.lanhu.explosion.view.GasView;
 import com.lanhu.explosion.view.PictureView;
 import com.lanhu.explosion.view.RecordView;
