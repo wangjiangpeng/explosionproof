@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements TaskCallback {
         mUIHandler = new UIHandler(this);
 
         ATask task = new InitDataTask();
-        task.addTaskCallback(this);
+        task.setTaskCallback(this);
         task.execute();
     }
 

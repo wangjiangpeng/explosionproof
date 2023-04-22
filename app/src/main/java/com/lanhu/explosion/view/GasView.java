@@ -60,7 +60,7 @@ public class GasView extends FrameLayout implements TaskCallback, TaskProgress {
 
         mList = new ArrayList<>();
         mGasCollectTask = TaskService.getInstance().getTask(GasCollectTask.class);
-        mGasCollectTask.addTaskCallback(this);
+        mGasCollectTask.setTaskCallback(this);
         mGasCollectTask.setTaskProgress(this);
         if(mGasCollectTask.isRunning()){
             mList.addAll(mGasCollectTask.getGasList());

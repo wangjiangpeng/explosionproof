@@ -60,7 +60,7 @@ public abstract class ATask<Progress> {
     /**
      * 弱引用，防止对象无法释放
      */
-    private ArrayList<WeakReference<TaskCallback>> weakCallbacks = new ArrayList<>();
+    private WeakReference<TaskCallback> weakCallback;
 
     /**
      * 弱引用，防止对象无法释放
@@ -114,13 +114,7 @@ public abstract class ATask<Progress> {
             executor.execute(mFuture);
         } else {
             if (isFinished()) {
-                for(int i = 0; i < weakCallbacks.size(); i++){
-                    WeakReference<TaskCallback> weak = weakCallbacks.get(i);
-                    TaskCallback callback = weak.get();
-                    if (callback != null) {
-                        callback.onFinished(this, result);
-                    }
-                }
+                doCallback();
             }
         }
     }
@@ -165,13 +159,7 @@ public abstract class ATask<Progress> {
             mSerialExecutor.execute(mFuture);
         } else {
             if (isFinished()) {
-                for(int i = 0; i < weakCallbacks.size(); i++){
-                    WeakReference<TaskCallback> weak = weakCallbacks.get(i);
-                    TaskCallback callback = weak.get();
-                    if (callback != null) {
-                        callback.onFinished(this, result);
-                    }
-                }
+                doCallback();
             }
         }
     }
@@ -234,19 +222,17 @@ public abstract class ATask<Progress> {
      *
      * @param callback
      */
-    public void addTaskCallback(TaskCallback callback) {
-        WeakReference<TaskCallback> weak = new WeakReference<TaskCallback>(callback);
-        weakCallbacks.add(weak);
-
+    public void setTaskCallback(TaskCallback callback) {
+        weakCallback = new WeakReference<>(callback);
     }
 
-    public void removeTaskCallback(TaskCallback callback) {
-        for(int i = 0; i < weakCallbacks.size(); i++){
-            WeakReference<TaskCallback> weak = weakCallbacks.get(i);
-            TaskCallback back = weak.get();
-            if (callback == back) {
-                weakCallbacks.remove(back);
-                break;
+    private void doCallback(){
+        if(weakCallback != null){
+            TaskCallback callback = weakCallback.get();
+            if (callback != null) {
+                callback.onFinished(this, result);
+            } else {
+                weakCallback = null;
             }
         }
     }
@@ -349,14 +335,7 @@ public abstract class ATask<Progress> {
 
         } else {
             onPostExecute(result);
-
-            for(int i = 0; i < weakCallbacks.size(); i++){
-                WeakReference<TaskCallback> weak = weakCallbacks.get(i);
-                TaskCallback callback = weak.get();
-                if (callback != null) {
-                    callback.onFinished(this, result);
-                }
-            }
+            doCallback();
         }
         mStatus = Status.FINISHED;
     }

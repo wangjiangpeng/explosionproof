@@ -30,7 +30,7 @@ public class GasCollectActivity extends Activity implements TaskCallback, TaskPr
         mReadBtn.setBackgroundResource(R.drawable.round_blue);
 
         mTask = TaskService.getInstance().getTask(GasCollectTask.class);
-        mTask.addTaskCallback(GasCollectActivity.this);
+        mTask.setTaskCallback(GasCollectActivity.this);
         mTask.setTaskProgress(GasCollectActivity.this);
 
         if (mTask.isRunning()) {
@@ -80,9 +80,4 @@ public class GasCollectActivity extends Activity implements TaskCallback, TaskPr
         mGasSb.setProgress((int) value);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        mTask.removeTaskCallback(this);
-    }
 }

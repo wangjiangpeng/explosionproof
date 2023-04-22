@@ -93,7 +93,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
                 MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
             } else {
                 CameraPictureTask task = new CameraPictureTask();
-                task.addTaskCallback(HomeView.this);
+                task.setTaskCallback(HomeView.this);
                 task.reExecute(0, sv.getSurfaceTexture());
             }
         });
@@ -104,7 +104,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
             } else {
                 CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
                 if (!task.isRunning()) {
-                    task.addTaskCallback(HomeView.this);
+                    task.setTaskCallback(HomeView.this);
                     task.reExecute();
                     mRecordTV.setText(R.string.explosion_recording);
                 } else {
@@ -131,7 +131,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
         mMemTV.setText(getContext().getString(R.string.explosion_mem, sizeStr));
         mStatusTV.setText("正常");
 
-        TaskService.getInstance().getTask(GasCollectTask.class).addTaskCallback(this);
+        TaskService.getInstance().getTask(GasCollectTask.class).setTaskCallback(this);
     }
 
     @Override
