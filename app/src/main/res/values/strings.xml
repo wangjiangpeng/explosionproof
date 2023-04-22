@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">鹰之眼</string>
 
+    <string name="cancel">取消</string>
 
     <string name="explosion_normal">正常</string>
     <string name="explosion_mem">剩余内存%s</string>
@@ -59,6 +60,7 @@
     <string name="settings_common_screen_hint">在屏幕不操作的情况下，经过多长时间休眠</string>
     <string name="settings_common_light">亮度</string>
     <string name="settings_common_music">声音</string>
+    <string name="settings_common_sleep">休眠</string>
 
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>

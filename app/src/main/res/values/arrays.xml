@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="screen_timeout_entries">
+        <item msgid="3342301044271143016">"15秒"</item>
+        <item msgid="8881760709354815449">"30秒"</item>
+        <item msgid="7589406073232279088">"1分钟"</item>
+        <item msgid="7001195990902244174">"2分钟"</item>
+        <item msgid="7489864775127957179">"5分钟"</item>
+        <item msgid="2314124409517439288">"10分钟"</item>
+        <item msgid="6864027152847611413">"30分钟"</item>
+        <item msgid="3149294732238284545">"永不"</item>
+    </string-array>
+
+    <!-- Do not translate. -->
+    <string-array name="screen_timeout_values" translatable="false">
+        <!-- Do not translate. -->
+        <item>15000</item>
+        <!-- Do not translate. -->
+        <item>30000</item>
+        <!-- Do not translate. -->
+        <item>60000</item>
+        <!-- Do not translate. -->
+        <item>120000</item>
+        <!-- Do not translate. -->
+        <item>300000</item>
+        <!-- Do not translate. -->
+        <item>600000</item>
+        <!-- Do not translate. -->
+        <item>1800000</item>
+        <!-- Do not translate. -->
+        <item>2147483647</item>
+    </string-array>
+
+</resources>

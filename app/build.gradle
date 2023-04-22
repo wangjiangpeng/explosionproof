@@ -20,6 +20,21 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            keyAlias "ec20"
+            keyPassword "123456"
+            storeFile file("../system_sign.jks")
+            storePassword "123456"
+        }
+        debug {
+            keyAlias "ec20"
+            keyPassword "123456"
+            storeFile file("../system_sign.jks")
+            storePassword "123456"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

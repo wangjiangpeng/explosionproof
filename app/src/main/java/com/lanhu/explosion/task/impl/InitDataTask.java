@@ -1,5 +1,7 @@
 package com.lanhu.explosion.task.impl;
 
+import android.util.Log;
+
 import com.lanhu.explosion.bean.GasItem;
 import com.lanhu.explosion.bean.GasStandardItem;
 import com.lanhu.explosion.store.DBManager;
