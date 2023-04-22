@@ -48,9 +48,8 @@ public class GasCollectTask extends ATask<Integer> {
     @Override
     protected void onPostExecute(Object result) {
         boolean suc = (boolean)result;
-        if(!suc){
-            MToast.makeText(R.string.toast_collect_fail, Toast.LENGTH_SHORT).show();
-        }
+
+        MToast.makeText(suc ? R.string.toast_collect_finish : R.string.toast_collect_err, Toast.LENGTH_LONG).show();
     }
 
     public ArrayList<GasItem> getGasList() {

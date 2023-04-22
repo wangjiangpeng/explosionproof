@@ -136,15 +136,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
     @Override
     public void onFinished(ATask task, Object result) {
-        if (task instanceof CameraPictureTask) {
-            boolean suc = (boolean) result;
-            MToast.makeText(suc ? R.string.toast_take_picture_finish : R.string.toast_take_picture_err, Toast.LENGTH_LONG).show();
-
-        } else if (task instanceof CameraRecordTask) {
-            boolean suc = (boolean) result;
-            MToast.makeText(suc ? R.string.toast_record_finish : R.string.toast_record_err, Toast.LENGTH_LONG).show();
-
-        } else if (task instanceof GasCollectTask) {
+        if (task instanceof GasCollectTask) {
             boolean suc = (boolean) result;
             if (suc) {
                 mAdapter.notifyDataSetChanged();

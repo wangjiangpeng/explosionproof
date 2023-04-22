@@ -2,12 +2,15 @@ package com.lanhu.explosion.task.impl;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.lanhu.explosion.AApplication;
+import com.lanhu.explosion.R;
 import com.lanhu.explosion.bean.BaseInfo;
 import com.lanhu.explosion.bean.PictureInfo;
 import com.lanhu.explosion.bean.RecordInfo;
 import com.lanhu.explosion.encoder.MediaWrapper;
+import com.lanhu.explosion.misc.MToast;
 import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.utils.FileUtils;
@@ -23,6 +26,13 @@ public class CameraRecordTask extends ATask {
     private int height = 480;
 
     MediaWrapper mMediaWrapper;
+
+    @Override
+    protected void onPostExecute(Object result) {
+        boolean suc = (boolean)result;
+
+        MToast.makeText(suc ? R.string.toast_record_finish : R.string.toast_record_err, Toast.LENGTH_LONG).show();
+    }
 
     @SuppressLint("MissingPermission")
     @Override

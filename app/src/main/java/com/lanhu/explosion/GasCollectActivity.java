@@ -65,7 +65,7 @@ public class GasCollectActivity extends Activity implements TaskCallback, TaskPr
     public void onFinished(ATask task, Object result) {
         if (task instanceof GasCollectTask) {
             boolean suc = (boolean) result;
-            mGasSb.setSecondaryProgress(100);
+            mGasSb.setProgress(100);
             if (suc) {
                 mReadBtn.setBackgroundResource(R.drawable.round_green);
                 mReadBtn.setText(R.string.gas_collect_finish);
