@@ -1,23 +1,16 @@
 package com.lanhu.explosion;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.task.TaskCallback;
-import com.lanhu.explosion.task.impl.GasCollectTask;
-import com.lanhu.explosion.task.impl.GasStandardTask;
-import com.lanhu.explosion.utils.DataUtils;
+import com.lanhu.explosion.task.impl.InitDataTask;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 
 
 public class MainActivity extends Activity implements TaskCallback {
@@ -32,7 +25,7 @@ public class MainActivity extends Activity implements TaskCallback {
 
         mUIHandler = new UIHandler(this);
 
-        ATask task = new GasStandardTask();
+        ATask task = new InitDataTask();
         task.addTaskCallback(this);
         task.execute();
     }

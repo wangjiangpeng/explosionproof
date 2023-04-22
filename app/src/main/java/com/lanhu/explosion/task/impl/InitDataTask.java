@@ -6,9 +6,7 @@ import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.store.SharedPrefManager;
 import com.lanhu.explosion.task.ATask;
 
-import java.util.ArrayList;
-
-public class GasStandardTask extends ATask {
+public class InitDataTask extends ATask {
 
     @Override
     protected Object doInBackground(Object... objs) {
