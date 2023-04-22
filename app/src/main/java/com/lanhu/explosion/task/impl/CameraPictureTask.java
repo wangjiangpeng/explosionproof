@@ -37,7 +37,6 @@ public class CameraPictureTask extends ATask {
     @Override
     protected void onPostExecute(Object result) {
         boolean suc = (boolean)result;
-
         MToast.makeText(suc ? R.string.toast_take_picture_finish : R.string.toast_take_picture_err, Toast.LENGTH_LONG).show();
     }
 
@@ -100,6 +99,8 @@ public class CameraPictureTask extends ATask {
                 db.insertPicture(new PictureInfo(savePath, BaseInfo.STATUS_UPLOAD_NO));
                 // todo upload service
             }
+
+            Thread.sleep(1000);
 
         } catch (Exception e) {
             e.printStackTrace();

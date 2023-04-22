@@ -16,6 +16,7 @@ public abstract class AbsEncoder {
     public abstract void writeSampleData(MediaMuxer mediaMuxer, RTMPMuxer rtmpMuxer);
     public abstract void endOfStream();
     public abstract boolean isEnd();
+    public abstract boolean isError();
 
     public boolean addTrack(MediaMuxer mediaMuxer) {
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();

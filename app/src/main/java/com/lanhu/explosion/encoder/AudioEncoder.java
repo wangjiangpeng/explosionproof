@@ -108,6 +108,11 @@ public class AudioEncoder extends AbsEncoder {
         return end;
     }
 
+    @Override
+    public boolean isError() {
+        return false;
+    }
+
     private boolean drain(byte[] buffer, int size) {
         int index = mMediaCodec.dequeueInputBuffer(0);
         if (index >= 0) {

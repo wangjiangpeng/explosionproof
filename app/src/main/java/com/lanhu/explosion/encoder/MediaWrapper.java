@@ -16,11 +16,13 @@ public class MediaWrapper {
     private boolean isConnected = false;
     private boolean isRunning = false;
     private Object mLock = new Object();
+    private boolean videoError = false;
+
 
     private static MediaWrapper sMediaWrapper;
 
-    public static MediaWrapper getInstance(){
-        if(sMediaWrapper == null){
+    public static MediaWrapper getInstance() {
+        if (sMediaWrapper == null) {
             sMediaWrapper = new MediaWrapper();
         }
         return sMediaWrapper;
@@ -51,6 +53,7 @@ public class MediaWrapper {
         if (mReadThread == null) {
             isRunning = true;
             isConnected = false;
+            videoError = false;
             mReadThread = new ReadThread();
             mReadThread.start();
         }
@@ -73,6 +76,10 @@ public class MediaWrapper {
                 }
             }
         }
+    }
+
+    public boolean isVideoError() {
+        return videoError;
     }
 
     public boolean isRunning() {
@@ -141,10 +148,11 @@ public class MediaWrapper {
                 mediaMuxer.release();
                 audioEncoder.stop();
                 videoEncoder.stop();
+
+                videoError = videoEncoder.isError();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             isRunning = false;
             synchronized (mLock) {
                 mLock.notify();

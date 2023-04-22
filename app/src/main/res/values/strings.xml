@@ -62,8 +62,10 @@
 
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>
+    <string name="toast_record_busy">正在关闭录像,请五秒后再试</string>
     <string name="toast_take_picture_finish">拍照完成</string>
     <string name="toast_take_picture_err">拍照失败,请稍后再试</string>
+    <string name="toast_take_picture_busy">正在拍照,请五秒后再试</string>
     <string name="toast_time_short">两次操作时间过短,请5秒后再试</string>
     <string name="toast_collect_finish">气体采集完成</string>
     <string name="toast_collect_err">气体采集失败,请稍后再试</string>

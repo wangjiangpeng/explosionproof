@@ -1,6 +1,7 @@
 package com.lanhu.explosion.task.impl;
 
 import android.annotation.SuppressLint;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,17 +21,27 @@ import java.io.File;
 public class CameraRecordTask extends ATask {
 
     private static final String TAG = "CameraRecordTask";
+    private static final int MIN_TIME = 5000;
 
     private String url = "rtmp://192.168.10.29/live/20";
     private int width = 640;
     private int height = 480;
 
-    MediaWrapper mMediaWrapper;
+    private MediaWrapper mMediaWrapper;
+    private StopThread mStopThread;
+    private long mStartTime;
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mStartTime = SystemClock.elapsedRealtime();
+    }
+
 
     @Override
     protected void onPostExecute(Object result) {
-        boolean suc = (boolean)result;
-
+        boolean suc = (boolean) result;
         MToast.makeText(suc ? R.string.toast_record_finish : R.string.toast_record_err, Toast.LENGTH_LONG).show();
     }
 
@@ -51,14 +62,46 @@ public class CameraRecordTask extends ATask {
             mMediaWrapper.startRecord();
             mMediaWrapper.waitStop();
 
-            DBManager db = DBManager.getInstance();
-            db.insertRecord(new RecordInfo(mediaFile.getAbsolutePath(), mMediaWrapper.isConnected() ? BaseInfo.STATUS_UPLOAD_OK : BaseInfo.STATUS_UPLOAD_NO));
-            return true;
+            if (mMediaWrapper.isVideoError()) {
+                if (mediaFile.exists()) {
+                    mediaFile.delete();
+                }
+                return false;
+            } else {
+                DBManager db = DBManager.getInstance();
+                db.insertRecord(new RecordInfo(mediaFile.getAbsolutePath(), mMediaWrapper.isConnected() ? BaseInfo.STATUS_UPLOAD_OK : BaseInfo.STATUS_UPLOAD_NO));
+                return true;
+            }
         }
     }
 
     public void stop() {
-        mMediaWrapper.stopRecord();
+        if (mStopThread == null) {
+            mStopThread = new StopThread();
+            mStopThread.start();
+        }
+    }
+
+    public boolean isStopping() {
+        return mStopThread != null;
+    }
+
+    private class StopThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+
+            long diffTime = SystemClock.elapsedRealtime() - mStartTime;
+            if (MIN_TIME > diffTime) {
+                try {
+                    Thread.sleep(MIN_TIME - diffTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            mMediaWrapper.stopRecord();
+            mStopThread = null;
+        }
     }
 
 }

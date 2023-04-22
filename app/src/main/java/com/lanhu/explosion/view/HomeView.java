@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lanhu.explosion.AApplication;
 import com.lanhu.explosion.CommActivity;
 import com.lanhu.explosion.ExplosionActivity;
 import com.lanhu.explosion.GasCollectActivity;
@@ -45,11 +46,12 @@ public class HomeView extends LinearLayout implements TaskCallback {
     RecyclerView mGasRV;
     RecyclerView mSettingsRV;
     TextureView sv;
-
     Button mRecordBtn;
     TextView mRecordTV;
-
     GasRecyclerAdapter mAdapter;
+
+    CameraRecordTask mCameraRecordTask;
+    CameraPictureTask mCameraPictureTask;
 
     private SettingsItem[] mSetItems = {
             new SettingsItem(R.drawable.comm_dw, R.string.explosion_comm, CommActivity.class),
@@ -89,30 +91,30 @@ public class HomeView extends LinearLayout implements TaskCallback {
         });
 
         findViewById(R.id.home_view_take_picture).setOnClickListener(v -> {
-            if (ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)) {
-                MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
+            if (mCameraPictureTask.isRunning()){
+                MToast.makeText(R.string.toast_take_picture_busy, Toast.LENGTH_SHORT).show();
             } else {
-                CameraPictureTask task = new CameraPictureTask();
-                task.setTaskCallback(HomeView.this);
-                task.reExecute(0, sv.getSurfaceTexture());
+                mCameraPictureTask.reExecute(0, sv.getSurfaceTexture());
             }
         });
 
         mRecordBtn.setOnClickListener(v -> {
-            if (ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)) {
-                MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
-            } else {
-                CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
-                if (!task.isRunning()) {
-                    task.setTaskCallback(HomeView.this);
-                    task.reExecute();
-                    mRecordTV.setText(R.string.explosion_recording);
-                } else {
-                    task.stop();
+            if(mCameraRecordTask.isStopping()){
+                MToast.makeText(R.string.toast_record_busy, Toast.LENGTH_SHORT).show();
+
+            } else if (mCameraRecordTask.isRunning()){
+                    mCameraRecordTask.stop();
                     mRecordTV.setText(R.string.explosion_open_camera);
-                }
+            } else {
+                mCameraRecordTask.reExecute();
+                mRecordTV.setText(R.string.explosion_recording);
             }
         });
+
+        mCameraRecordTask = TaskService.getInstance().getTask(CameraRecordTask.class);
+        mCameraRecordTask.setTaskCallback(this);
+        mCameraPictureTask = TaskService.getInstance().getTask(CameraPictureTask.class);
+        mCameraPictureTask.setTaskCallback(this);
 
         GridLayoutManager gasManager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
         mGasRV.setAdapter(mAdapter = new GasRecyclerAdapter());

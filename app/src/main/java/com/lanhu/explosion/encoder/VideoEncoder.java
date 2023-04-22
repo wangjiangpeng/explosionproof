@@ -42,6 +42,7 @@ public class VideoEncoder extends AbsEncoder {
     private CameraCaptureSession mCaptureSession;
 
     private long timeStamp;
+    private boolean cameraErr = false;
 
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
@@ -58,7 +59,16 @@ public class VideoEncoder extends AbsEncoder {
 
         @Override
         public void onError(CameraDevice cameraDevice, int error) {
+            if(mCaptureSession != null){
+                try {
+                    mCaptureSession.stopRepeating();
+                    mCaptureSession.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             cameraDevice.close();
+            cameraErr = true;
         }
 
     };
@@ -125,7 +135,6 @@ public class VideoEncoder extends AbsEncoder {
         try {
             CameraManager cameraManager = (CameraManager) AApplication.getInstance().getSystemService(Context.CAMERA_SERVICE);
             cameraManager.openCamera(String.valueOf(mCameraId), mStateCallback, new Handler(Looper.getMainLooper()));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,6 +146,10 @@ public class VideoEncoder extends AbsEncoder {
         try {
             mCaptureSession.stopRepeating();
             mCaptureSession.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             mCameraDevice.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,6 +210,11 @@ public class VideoEncoder extends AbsEncoder {
     @Override
     public boolean isEnd() {
         return end;
+    }
+
+    @Override
+    public boolean isError() {
+        return cameraErr;
     }
 
 }
