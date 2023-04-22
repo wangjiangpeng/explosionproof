@@ -5,7 +5,13 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.lanhu.explosion.AApplication;
-import com.lanhu.explosion.bean.GasStandardInfo;
+import com.lanhu.explosion.bean.GasStandardItem;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * 存储
@@ -21,8 +27,9 @@ public class SharedPrefManager {
     private SharedPreferences resultPref;
 
     private static SharedPrefManager sSharedPrefManager;
-    public static SharedPrefManager getInstance(){
-        if(sSharedPrefManager == null){
+
+    public static SharedPrefManager getInstance() {
+        if (sSharedPrefManager == null) {
             sSharedPrefManager = new SharedPrefManager();
         }
         return sSharedPrefManager;
@@ -32,37 +39,45 @@ public class SharedPrefManager {
         resultPref = AApplication.getInstance().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public synchronized void setGasStandard(GasStandardInfo info) {
-        SharedPreferences.Editor editor = resultPref.edit();
+    public synchronized void saveGasStandard(HashMap<Integer, GasStandardItem> map) {
+        Set<Integer> keys = map.keySet();
         StringBuilder sb = new StringBuilder();
-        sb.append(info.CO);
-        sb.append(";");
-        sb.append(info.H2S);
-        sb.append(";");
-        sb.append(info.O2);
-        sb.append(";");
-        sb.append(info.CH4);
+        for(Integer key : keys){
+            GasStandardItem item = map.get(key);
+            sb.append(item.getType());
+            sb.append(",");
+            sb.append(item.getStandard());
+            sb.append(",");
+            sb.append(item.getChannel());
+            sb.append(";");
+        }
+        if (sb.length() > 0) {
+            sb.delete(sb.length() - 1, sb.length());
+        }
+        SharedPreferences.Editor editor = resultPref.edit();
         editor.putString(GAS_STANDARD, sb.toString());
         editor.commit();
     }
 
-    public synchronized GasStandardInfo getGasStandard() {
+    public synchronized boolean getGasStandard(HashMap<Integer, GasStandardItem> map) {
         String str = resultPref.getString(GAS_STANDARD, "");
-        if(TextUtils.isEmpty(str)){
-            return null;
+        if (TextUtils.isEmpty(str)) {
+            return false;
         }
 
         String[] sp = str.split(";");
-        if(sp.length != 4){
-            return null;
+        if (sp == null || sp.length == 0) {
+            return false;
         }
 
-        GasStandardInfo info = new GasStandardInfo();
-        info.CO = Integer.valueOf(sp[0]);
-        info.H2S = Integer.valueOf(sp[1]);
-        info.O2 = Integer.valueOf(sp[2]);
-        info.CH4 = Integer.valueOf(sp[3]);
-        return info;
+        for (String s : sp) {
+            String[] ss = s.split(",");
+            if (ss == null || ss.length != 3) {
+                continue;
+            }
+            map.put(Integer.valueOf(ss[0]), new GasStandardItem(Integer.valueOf(ss[0]), Integer.valueOf(ss[1]), Integer.valueOf(ss[2])));
+        }
+        return true;
     }
 
 

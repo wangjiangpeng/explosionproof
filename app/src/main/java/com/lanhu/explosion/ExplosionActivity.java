@@ -2,32 +2,13 @@ package com.lanhu.explosion;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.lanhu.explosion.bean.GasInfo;
-import com.lanhu.explosion.task.ATask;
-import com.lanhu.explosion.task.TaskCallback;
-import com.lanhu.explosion.task.TaskService;
-import com.lanhu.explosion.task.impl.GasCollectTask;
-import com.lanhu.explosion.utils.DataUtils;
-import com.lanhu.explosion.utils.MemUtils;
 import com.lanhu.explosion.view.HomeFullView;
 import com.lanhu.explosion.view.HomeView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ExplosionActivity extends Activity{
 

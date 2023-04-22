@@ -1,14 +1,18 @@
 package com.lanhu.explosion.task.impl;
 
 import android.util.Log;
+import android.widget.Toast;
 
-import com.lanhu.explosion.bean.GasInfo;
-import com.lanhu.explosion.bean.GasStandardInfo;
+import com.lanhu.explosion.R;
+import com.lanhu.explosion.bean.GasItem;
+import com.lanhu.explosion.bean.GasStandardItem;
+import com.lanhu.explosion.misc.MToast;
 import com.lanhu.explosion.serial.SerialPort;
 import com.lanhu.explosion.store.DBManager;
-import com.lanhu.explosion.store.SharedPrefManager;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.utils.DataUtils;
+
+import java.util.ArrayList;
 
 /**
  * 0        1        2        3        4        5        6        7        8        9        10
@@ -25,32 +29,74 @@ public class GasCollectTask extends ATask<Integer> {
     private static final int STOP_BITS = 1;
     private static final int FLOW_CONTROL = 0;
 
+    private ArrayList<GasItem> mList = new ArrayList<>();
+
+    private int process = 0;
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        process = 0;
+        mList.clear();
+        mList.add(new GasItem(GasItem.TYPE_CO, GasStandardItem.sMap.get(GasItem.TYPE_CO)));
+        mList.add(new GasItem(GasItem.TYPE_H2S, GasStandardItem.sMap.get(GasItem.TYPE_H2S)));
+        mList.add(new GasItem(GasItem.TYPE_O2, GasStandardItem.sMap.get(GasItem.TYPE_O2)));
+        mList.add(new GasItem(GasItem.TYPE_CH4, GasStandardItem.sMap.get(GasItem.TYPE_CH4)));
+    }
+
+    @Override
+    protected void onPostExecute(Object result) {
+        boolean suc = (boolean)result;
+        if(!suc){
+            MToast.makeText(R.string.toast_collect_fail, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public ArrayList<GasItem> getGasList() {
+        return mList;
+    }
+
     @Override
     protected Object doInBackground(Object... objs) {
         try {
-            publishProgress(5);
-            Thread.sleep(1000);
-            publishProgress(50);
+            // todo pump machine
+            while (process < 90) {
+                process += 5;
+                publishProgress(process);
+                Thread.sleep(1000);
+            }
 
-            Log.e("GasCollectTask", "doInBackground" );
             byte[] buffer = requestDeviceData();
             if (buffer != null) {
-                GasInfo info = parseData(buffer);
-                if (info != null) {
-                    GasStandardInfo.checkGas(GasStandardInfo.sInfo, info);
-                    DBManager.getInstance().insertGas(info);
-                    GasInfo.sInfo = info;
+                int[] values = parseData(buffer);
+//                int[] values = new int[]{25, 11, 208, 6};
+                if (values != null) {
+                    long time = System.currentTimeMillis();
+                    for (int i = 0; i < values.length; i++) {
+                        mList.get(i).setValue(values[i]);
+                        mList.get(i).setTime(time);
+                    }
+                    GasItem.mList.clear();
+                    GasItem.mList.addAll(mList);
+                    DBManager.getInstance().insertGas(mList);
+
+                    process = 100;
+                    publishProgress(process);
+                    return true;
+                    // todo upload
                 }
-                publishProgress(100);
-                return info;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        publishProgress(100);
-        return null;
+        process = 100;
+        return false;
     }
 
+    public int getProcess() {
+        return process;
+    }
 
     private byte[] requestDeviceData() {
         try {
@@ -69,6 +115,7 @@ public class GasCollectTask extends ATask<Integer> {
                         while (true) {
                             byte[] data = port.receiver();
                             if (data != null) {
+                                Log.e("WJP", "data");
                                 System.arraycopy(data, 0, buffer, pos, data.length);
                                 pos += data.length;
                             }
@@ -94,18 +141,16 @@ public class GasCollectTask extends ATask<Integer> {
         return null;
     }
 
-    private GasInfo parseData(byte[] buffer) {
+    private int[] parseData(byte[] buffer) {
         int index = 0;
-        Log.e("GasCollectTask", "parseData" + DataUtils.bytesToString(buffer));
         while (index < buffer.length - 10) {
             if (buffer[index] == (byte) 0xff && buffer[index + 1] == (byte) 0x86) {
-                GasInfo info = new GasInfo();
-                info.CO = DataUtils.byteArrayToShort(buffer, index + 2);
-                info.H2S = DataUtils.byteArrayToShort(buffer, index + 4);
-                info.O2 = DataUtils.byteArrayToShort(buffer, index + 6);
-                info.CH4 = DataUtils.byteArrayToShort(buffer, index + 8);
-                info.time = System.currentTimeMillis();
-                return info;
+                int[] values = new int[4];
+                values[0] = DataUtils.byteArrayToShort(buffer, index + 2);
+                values[1] = DataUtils.byteArrayToShort(buffer, index + 4);
+                values[2] = DataUtils.byteArrayToShort(buffer, index + 6);
+                values[3] = DataUtils.byteArrayToShort(buffer, index + 8);
+                return values;
             }
             index++;
         }

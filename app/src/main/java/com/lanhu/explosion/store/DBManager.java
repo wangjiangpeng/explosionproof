@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lanhu.explosion.AApplication;
-import com.lanhu.explosion.bean.GasInfo;
+import com.lanhu.explosion.bean.GasItem;
 import com.lanhu.explosion.bean.PictureInfo;
 import com.lanhu.explosion.bean.RecordInfo;
 
@@ -72,7 +72,7 @@ public class DBManager {
     }
 
     public synchronized long deletePicture(PictureInfo info) {
-        long result = mDB.delete(DBHelper.TABLE_PICTURE_NAME, "id=?",  new String[]{String.valueOf(info.getDbId())});
+        long result = mDB.delete(DBHelper.TABLE_PICTURE_NAME, "id=?", new String[]{String.valueOf(info.getDbId())});
         return result;
     }
 
@@ -110,37 +110,77 @@ public class DBManager {
     }
 
     public synchronized long deleteRecord(RecordInfo info) {
-        long result = mDB.delete(DBHelper.TABLE_RECORD_NAME, "id=?",  new String[]{String.valueOf(info.getDbId())});
+        long result = mDB.delete(DBHelper.TABLE_RECORD_NAME, "id=?", new String[]{String.valueOf(info.getDbId())});
         return result;
     }
 
-    public synchronized long insertGas(GasInfo info) {
+    //select max(xxx) from  where type=1;select max(case when type=1 then xxx end )
+    public synchronized void insertGas(ArrayList<GasItem> list) {
+        for (GasItem item : list) {
+            insertGas(item);
+        }
+    }
+
+    public synchronized long insertGas(GasItem item) {
         ContentValues cv = new ContentValues();
-        cv.put(DBHelper.COLUMN_O2, info.O2);
-        cv.put(DBHelper.COLUMN_CO, info.CO);
-        cv.put(DBHelper.COLUMN_CH4, info.CH4);
-        cv.put(DBHelper.COLUMN_H2S, info.H2S);
-        cv.put(DBHelper.COLUMN_TIME, info.time);
+        cv.put(DBHelper.COLUMN_TYPE, item.getType());
+        cv.put(DBHelper.COLUMN_STANDARD, item.getStandard());
+        cv.put(DBHelper.COLUMN_CHANNEL, item.getChannel());
+        cv.put(DBHelper.COLUMN_VALUE, item.getValue());
+        cv.put(DBHelper.COLUMN_TIME, item.getTime());
         long result = mDB.insert(DBHelper.TABLE_GAS_NAME, "", cv);
         return result;
     }
 
-    public synchronized ArrayList<GasInfo> queryGas() {
-        ArrayList<GasInfo> list = new ArrayList<>();
+    public synchronized ArrayList<GasItem> queryGas() {
+        ArrayList<GasItem> list = new ArrayList<>();
         Cursor cursor = mDB.query(DBHelper.TABLE_GAS_NAME, DBHelper.TABLE_GAS_COLUMNS, null, null, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                GasInfo info = new GasInfo();
-                info.O2 = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_O2));
-                info.CO = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CO));
-                info.CH4 = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CH4));
-                info.H2S = cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_H2S));
-                info.time = cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_TIME));
-                list.add(info);
+                GasItem item = new GasItem();
+                item.setType(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_TYPE)));
+                item.setStandard(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_STANDARD)));
+                item.setChannel(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CHANNEL)));
+                item.setValue(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_VALUE)));
+                item.setTime(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_TIME)));
+                list.add(item);
             }
             cursor.close();
         }
         return list;
+    }
+
+    public synchronized GasItem queryGasLastTime(int type) {
+        GasItem item = null;
+        Cursor cursor = mDB.query(DBHelper.TABLE_GAS_NAME, DBHelper.TABLE_GAS_COLUMNS, "type=?",
+                new String[]{String.valueOf(type)}, null, null, DBHelper.COLUMN_TIME + " desc");
+        if (cursor != null && cursor.moveToNext()) {
+            item = new GasItem();
+            item.setType(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_TYPE)));
+            item.setStandard(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_STANDARD)));
+            item.setChannel(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_CHANNEL)));
+            item.setValue(cursor.getInt(cursor.getColumnIndex(DBHelper.COLUMN_VALUE)));
+            item.setTime(cursor.getLong(cursor.getColumnIndex(DBHelper.COLUMN_TIME)));
+        }
+        cursor.close();
+        return item;
+    }
+
+    public synchronized long deleteGas(GasItem item) {
+        long result = mDB.delete(DBHelper.TABLE_RECORD_NAME, "id=?", new String[]{String.valueOf(item.getDbId())});
+        return result;
+    }
+
+    public synchronized long updateGas(GasItem item) {
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.COLUMN_ID, item.getDbId());
+        cv.put(DBHelper.COLUMN_TYPE, item.getType());
+        cv.put(DBHelper.COLUMN_STANDARD, item.getStandard());
+        cv.put(DBHelper.COLUMN_CHANNEL, item.getChannel());
+        cv.put(DBHelper.COLUMN_VALUE, item.getValue());
+        cv.put(DBHelper.COLUMN_TIME, item.getTime());
+        long result = mDB.update(DBHelper.TABLE_RECORD_NAME, cv, "id=?", new String[]{String.valueOf(item.getDbId())});
+        return result;
     }
 
     public static class DBHelper extends SQLiteOpenHelper {
@@ -149,18 +189,17 @@ public class DBManager {
         private static final String DATABASE_NAME = "Database.db";
         private static final int DATABASE_VERSION = 1;
 
-        private static final String TABLE_PICTURE_NAME = "picture";
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_PATH = "path";
         public static final String COLUMN_STATUS = "status";
-
-        private static final String TABLE_GAS_NAME = "gas";
-        public static final String COLUMN_O2 = "O2";
-        public static final String COLUMN_CO = "CO";
-        public static final String COLUMN_CH4 = "CH4";
-        public static final String COLUMN_H2S = "H2S";
+        public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_TIME = "time";
+        public static final String COLUMN_STANDARD = "standard";
+        public static final String COLUMN_CHANNEL = "channel";
+        public static final String COLUMN_VALUE = "value";
 
+        private static final String TABLE_PICTURE_NAME = "picture";
+        private static final String TABLE_GAS_NAME = "gas";
         private static final String TABLE_RECORD_NAME = "record";
 
         public static final String[] TABLE_PICTURE_COLUMNS = {
@@ -171,10 +210,10 @@ public class DBManager {
 
         public static final String[] TABLE_GAS_COLUMNS = {
                 COLUMN_ID,
-                COLUMN_O2,
-                COLUMN_CO,
-                COLUMN_CH4,
-                COLUMN_H2S,
+                COLUMN_TYPE,
+                COLUMN_STANDARD,
+                COLUMN_CHANNEL,
+                COLUMN_VALUE,
                 COLUMN_TIME
         };
 
@@ -206,20 +245,20 @@ public class DBManager {
             database.execSQL(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS "
-                    + TABLE_GAS_NAME + " ( "
-                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + COLUMN_O2 + " INTEGER,"
-                    + COLUMN_CO + " INTEGER,"
-                    + COLUMN_CH4 + " INTEGER,"
-                    + COLUMN_H2S + " INTEGER,"
-                    + COLUMN_TIME + " BIGINT)";
-            database.execSQL(sql);
-
-            sql = "CREATE TABLE IF NOT EXISTS "
                     + TABLE_RECORD_NAME + " ( "
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + COLUMN_PATH + " TEXT,"
                     + COLUMN_STATUS + " INTEGER)";
+            database.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS "
+                    + TABLE_GAS_NAME + " ( "
+                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_TYPE + " INTEGER,"
+                    + COLUMN_STANDARD + " INTEGER,"
+                    + COLUMN_CHANNEL + " INTEGER,"
+                    + COLUMN_VALUE + " INTEGER,"
+                    + COLUMN_TIME + " BIGINT)";
             database.execSQL(sql);
         }
 

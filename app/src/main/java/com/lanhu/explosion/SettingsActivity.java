@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lanhu.explosion.view.CommonView;
+import com.lanhu.explosion.view.GasView;
 import com.lanhu.explosion.view.PictureView;
 import com.lanhu.explosion.view.RecordView;
 
@@ -24,31 +25,26 @@ public class SettingsActivity extends Activity {
 
         mCurrentLayout.addView(new PictureView(SettingsActivity.this));
 
-        findViewById(R.id.settings_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        findViewById(R.id.settings_back).setOnClickListener(v -> {
+            finish();
         });
 
-        findViewById(R.id.settings_picture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceConnectView(new PictureView(SettingsActivity.this));
-            }
+        findViewById(R.id.settings_picture).setOnClickListener(v -> {
+            replaceConnectView(new PictureView(SettingsActivity.this));
         });
 
-        findViewById(R.id.settings_video).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceConnectView(new RecordView(SettingsActivity.this));
-            }
+        findViewById(R.id.settings_video).setOnClickListener(v -> {
+            replaceConnectView(new RecordView(SettingsActivity.this));
+        });
+
+        findViewById(R.id.settings_collect).setOnClickListener(v -> {
+            replaceConnectView(new GasView(SettingsActivity.this));
         });
 
         replaceConnectView(new PictureView(SettingsActivity.this));
     }
 
-    private void replaceConnectView(View view){
+    private void replaceConnectView(View view) {
         mCurrentLayout.removeAllViews();
         mCurrentLayout.addView(view);
     }

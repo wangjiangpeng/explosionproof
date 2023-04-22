@@ -8,9 +8,10 @@
     </item>
 
     <item
-        android:gravity="center"
-        android:width="15dp"
-        android:height="15dp">
+        android:gravity="center_horizontal"
+        android:top="7dp"
+        android:width="13dp"
+        android:height="13dp">
         <bitmap android:src="@mipmap/err" />
     </item>
 

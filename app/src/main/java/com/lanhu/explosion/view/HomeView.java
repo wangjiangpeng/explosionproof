@@ -3,10 +3,7 @@ package com.lanhu.explosion.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioDeviceInfo;
-import android.media.AudioManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -25,7 +22,7 @@ import com.lanhu.explosion.ExplosionActivity;
 import com.lanhu.explosion.GasCollectActivity;
 import com.lanhu.explosion.R;
 import com.lanhu.explosion.SettingsActivity;
-import com.lanhu.explosion.bean.GasInfo;
+import com.lanhu.explosion.bean.GasItem;
 import com.lanhu.explosion.misc.MToast;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.task.TaskCallback;
@@ -35,7 +32,6 @@ import com.lanhu.explosion.task.impl.CameraRecordTask;
 import com.lanhu.explosion.task.impl.GasCollectTask;
 import com.lanhu.explosion.utils.ButtonUtils;
 import com.lanhu.explosion.utils.DataUtils;
-import com.lanhu.explosion.utils.FileUtils;
 import com.lanhu.explosion.utils.MemUtils;
 
 import java.text.SimpleDateFormat;
@@ -50,9 +46,10 @@ public class HomeView extends LinearLayout implements TaskCallback {
     RecyclerView mSettingsRV;
     TextureView sv;
 
-    GasInfo mInfo;
     Button mRecordBtn;
     TextView mRecordTV;
+
+    GasRecyclerAdapter mAdapter;
 
     private SettingsItem[] mSetItems = {
             new SettingsItem(R.drawable.comm_dw, R.string.explosion_comm, CommActivity.class),
@@ -86,50 +83,39 @@ public class HomeView extends LinearLayout implements TaskCallback {
         mRecordBtn = findViewById(R.id.home_view_open_camera);
         mRecordTV = findViewById(R.id.home_view_record_text);
 
-        findViewById(R.id.home_view_fullscreen).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ExplosionActivity act = (ExplosionActivity) context;
-                act.replaceFullHome();
+        findViewById(R.id.home_view_fullscreen).setOnClickListener(v -> {
+            ExplosionActivity act = (ExplosionActivity) context;
+            act.replaceFullHome();
+        });
+
+        findViewById(R.id.home_view_take_picture).setOnClickListener(v -> {
+            if (ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)) {
+                MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
+            } else {
+                CameraPictureTask task = new CameraPictureTask();
+                task.addTaskCallback(HomeView.this);
+                task.reExecute(0, sv.getSurfaceTexture());
             }
         });
 
-        findViewById(R.id.home_view_take_picture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)){
-                    MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
-                } else {
-                    CameraPictureTask task = new CameraPictureTask();
+        mRecordBtn.setOnClickListener(v -> {
+            if (ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)) {
+                MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
+            } else {
+                CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
+                if (!task.isRunning()) {
                     task.addTaskCallback(HomeView.this);
-                    task.reExecute(0, sv.getSurfaceTexture());
-                }
-            }
-        });
-
-        mRecordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(ButtonUtils.isFastDoubleClick(R.id.home_view_take_picture)){
-                    MToast.makeText(R.string.toast_time_short, Toast.LENGTH_SHORT).show();
+                    task.reExecute();
+                    mRecordTV.setText(R.string.explosion_recording);
                 } else {
-                    CameraRecordTask task = TaskService.getInstance().getTask(CameraRecordTask.class);
-                    if (!task.isRunning()) {
-                        task.addTaskCallback(HomeView.this);
-                        task.reExecute();
-                        mRecordTV.setText(R.string.explosion_recording);
-                    } else {
-                        task.stop();
-                        mRecordTV.setText(R.string.explosion_open_camera);
-                    }
+                    task.stop();
+                    mRecordTV.setText(R.string.explosion_open_camera);
                 }
             }
         });
-
-        mInfo = GasInfo.sInfo;
 
         GridLayoutManager gasManager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
-        mGasRV.setAdapter(new GasRecyclerAdapter(mInfo));
+        mGasRV.setAdapter(mAdapter = new GasRecyclerAdapter());
         mGasRV.setLayoutManager(gasManager);
 
         GridLayoutManager settingsManager = new GridLayoutManager(getContext(), mSetItems.length, RecyclerView.VERTICAL, false);
@@ -159,9 +145,9 @@ public class HomeView extends LinearLayout implements TaskCallback {
             MToast.makeText(suc ? R.string.toast_record_finish : R.string.toast_record_err, Toast.LENGTH_LONG).show();
 
         } else if (task instanceof GasCollectTask) {
-            if (result != null) {
-                mInfo = (GasInfo) result;
-                mGasRV.setAdapter(new GasRecyclerAdapter(mInfo));
+            boolean suc = (boolean) result;
+            if (suc) {
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -187,10 +173,7 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
     private class GasRecyclerAdapter extends RecyclerView.Adapter<GasVH> {
 
-        GasInfo info;
-
-        GasRecyclerAdapter(GasInfo info) {
-            this.info = info;
+        GasRecyclerAdapter() {
         }
 
         @Override
@@ -200,59 +183,20 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
         @Override
         public void onBindViewHolder(GasVH holder, int position) {
-            switch (position) {
-                case 0:
-                    holder.icon.setImageResource(R.mipmap.oxygen);
-                    holder.name.setText(R.string.explosion_oxygen);
-                    holder.value.setText(String.valueOf(info.O2));
-                    if (info.status_O2 == GasInfo.STATUS_OK) {
-                        holder.status.setTextColor(getResources().getColor(R.color.green, null));
-                        holder.status.setText(R.string.explosion_qualified);
-                    } else {
-                        holder.status.setTextColor(getResources().getColor(R.color.red, null));
-                        holder.status.setText(R.string.explosion_warn);
-                    }
-                    break;
-                case 1:
-                    holder.icon.setImageResource(R.mipmap.co);
-                    holder.name.setText(R.string.explosion_co);
-                    holder.value.setText(String.valueOf(info.CO));
-                    if (info.status_CO == GasInfo.STATUS_OK) {
-                        holder.status.setTextColor(getResources().getColor(R.color.green, null));
-                        holder.status.setText(R.string.explosion_qualified);
-                    } else {
-                        holder.status.setTextColor(getResources().getColor(R.color.red, null));
-                        holder.status.setText(R.string.explosion_warn);
-                    }
-                    break;
-                case 2:
-                    holder.icon.setImageResource(R.mipmap.burn_gas);
-                    holder.name.setText(R.string.explosion_burn_gas);
-                    holder.value.setText(String.valueOf(info.CH4));
-                    if (info.status_CH4 == GasInfo.STATUS_OK) {
-                        holder.status.setTextColor(getResources().getColor(R.color.green, null));
-                        holder.status.setText(R.string.explosion_qualified);
-                    } else {
-                        holder.status.setTextColor(getResources().getColor(R.color.red, null));
-                        holder.status.setText(R.string.explosion_warn);
-                    }
-                    break;
-                case 3:
-                    holder.icon.setImageResource(R.mipmap.hydrogen);
-                    holder.name.setText(R.string.explosion_hydrogen);
-                    holder.value.setText(String.valueOf(info.H2S));
-                    if (info.status_H2S == GasInfo.STATUS_OK) {
-                        holder.status.setTextColor(getResources().getColor(R.color.green, null));
-                        holder.status.setText(R.string.explosion_qualified);
-                    } else {
-                        holder.status.setTextColor(getResources().getColor(R.color.red, null));
-                        holder.status.setText(R.string.explosion_warn);
-                    }
-                    break;
+            GasItem item = GasItem.mList.get(position);
+            holder.icon.setImageResource(item.getIconId());
+            holder.name.setText(item.getNameId());
+            holder.value.setText(String.valueOf(item.getValueUnit()));
+            if (item.getStatus() == GasItem.STATUS_OK) {
+                holder.status.setTextColor(getResources().getColor(R.color.green, null));
+                holder.status.setText(R.string.explosion_qualified);
+            } else {
+                holder.status.setTextColor(getResources().getColor(R.color.red, null));
+                holder.status.setText(R.string.explosion_warn);
             }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            holder.data.setText(dateFormat.format(new Date(info.time)));
+            holder.data.setText(dateFormat.format(new Date(item.getTime())));
         }
 
         @Override

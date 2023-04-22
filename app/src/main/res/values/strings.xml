@@ -49,6 +49,11 @@
     <string name="settings_upload">上传</string>
     <string name="settings_delete">删除</string>
     <string name="settings_select_object">选择项目</string>
+    <string name="settings_channel">采集通道:%s</string>
+    <string name="settings_qualified">合格</string>
+    <string name="settings_unqualified">不合格</string>
+    <string name="settings_process">采集数据:%d</string>
+    <string name="settings_standard">合格标准:%s</string>
 
     <string name="settings_common_screen">屏幕</string>
     <string name="settings_common_screen_hint">在屏幕不操作的情况下，经过多长时间休眠</string>
@@ -60,4 +65,5 @@
     <string name="toast_take_picture_finish">拍照完成</string>
     <string name="toast_take_picture_err">拍照失败,请稍后再试</string>
     <string name="toast_time_short">两次操作时间过短,请5秒后再试</string>
+    <string name="toast_collect_fail">采集失败,请稍后再试</string>
 </resources>
