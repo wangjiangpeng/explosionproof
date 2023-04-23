@@ -39,7 +39,7 @@
     <string name="settings_video">录像库</string>
     <string name="settings_collect">气体采集库</string>
     <string name="settings_device_info">设备基础配置</string>
-    <string name="settings_server">服务器通讯配置配置</string>
+    <string name="settings_server">服务器通讯配置</string>
     <string name="settings_passeord">密码配置</string>
     <string name="settings_net">网络设置</string>
     <string name="settings_common">通用</string>
@@ -71,6 +71,10 @@
     <string name="settings_device_info_firmware">固件版本号</string>
     <string name="settings_device_info_software">软件版本号</string>
     <string name="settings_device_info_name_not_empty">设备名称不能为空</string>
+
+    <string name="settings_server_addr">服务器地址</string>
+    <string name="settings_server_addr_hint">请输入服务器地址</string>
+    <string name="settings_server_addr_not_empty">服务器地址不能为空</string>
 
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>

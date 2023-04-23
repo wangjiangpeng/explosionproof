@@ -10,6 +10,7 @@ import com.lanhu.explosion.view.DeviceInfoView;
 import com.lanhu.explosion.view.GasView;
 import com.lanhu.explosion.view.PictureView;
 import com.lanhu.explosion.view.RecordView;
+import com.lanhu.explosion.view.ServerView;
 
 public class SettingsActivity extends Activity {
 
@@ -46,6 +47,10 @@ public class SettingsActivity extends Activity {
 
         findViewById(R.id.settings_device_info).setOnClickListener(v -> {
             replaceConnectView(new DeviceInfoView(SettingsActivity.this));
+        });
+
+        findViewById(R.id.settings_server).setOnClickListener(v -> {
+            replaceConnectView(new ServerView(SettingsActivity.this));
         });
 
         replaceConnectView(new PictureView(SettingsActivity.this));

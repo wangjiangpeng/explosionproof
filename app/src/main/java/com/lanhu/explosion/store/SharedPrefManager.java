@@ -24,6 +24,7 @@ public class SharedPrefManager {
     private static final String PREF_NAME = "shared_manager";
     private static final String GAS_STANDARD = "gas_standard";
     private static final String MAC = "mac";
+    private static final String SERVER_ADDRESS = "server_address";
 
     private SharedPreferences resultPref;
 
@@ -89,6 +90,16 @@ public class SharedPrefManager {
 
     public String getMac(){
         return resultPref.getString(MAC, null);
+    }
+
+    public void saveServerAddress(String address){
+        SharedPreferences.Editor editor = resultPref.edit();
+        editor.putString(SERVER_ADDRESS, address);
+        editor.commit();
+    }
+
+    public String getServerAddress(){
+        return resultPref.getString(SERVER_ADDRESS, null);
     }
 
 }
