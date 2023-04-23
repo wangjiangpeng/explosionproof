@@ -1,11 +1,11 @@
 package com.lanhu.explosion.utils;
 
 import android.content.Context;
-import android.os.Environment;
 
-import com.lanhu.explosion.AApplication;
-
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 public class FileUtils {
 
@@ -59,6 +59,30 @@ public class FileUtils {
                 }
             }
         }
+    }
+
+    public static String getFileFirstLine(String path) {
+        File file = new File(path);
+        if(!file.exists()){
+            return null;
+        }
+        BufferedReader br = null;
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            br = new BufferedReader(isr);
+            String str = br.readLine();
+            return str;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 }

@@ -7,6 +7,7 @@ import com.lanhu.explosion.bean.GasStandardItem;
 import com.lanhu.explosion.store.DBManager;
 import com.lanhu.explosion.store.SharedPrefManager;
 import com.lanhu.explosion.task.ATask;
+import com.lanhu.explosion.utils.FileUtils;
 
 public class InitDataTask extends ATask {
 
@@ -44,6 +45,11 @@ public class InitDataTask extends ATask {
             GasItem.mList.add(new GasItem(GasItem.TYPE_O2));
             GasItem.mList.add(new GasItem(GasItem.TYPE_CH4));
             GasItem.mList.add(new GasItem(GasItem.TYPE_H2S));
+        }
+
+        String mac = FileUtils.getFileFirstLine("/sys/class/net/wlan0/address");
+        if(mac != null){
+            SharedPrefManager.getInstance().saveMac(mac);
         }
         return null;
     }

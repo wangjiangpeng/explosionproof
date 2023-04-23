@@ -2,6 +2,7 @@
     <string name="app_name">鹰之眼</string>
 
     <string name="cancel">取消</string>
+    <string name="ok">确定</string>
 
     <string name="explosion_normal">正常</string>
     <string name="explosion_mem">剩余内存%s</string>
@@ -37,7 +38,7 @@
     <string name="settings_picture">照片库</string>
     <string name="settings_video">录像库</string>
     <string name="settings_collect">气体采集库</string>
-    <string name="settings_base_info">设备基础配置</string>
+    <string name="settings_device_info">设备基础配置</string>
     <string name="settings_server">服务器通讯配置配置</string>
     <string name="settings_passeord">密码配置</string>
     <string name="settings_net">网络设置</string>
@@ -61,6 +62,15 @@
     <string name="settings_common_light">亮度</string>
     <string name="settings_common_music">声音</string>
     <string name="settings_common_sleep">休眠</string>
+
+    <string name="settings_device_info_name">设备名称</string>
+    <string name="settings_device_info_mac">设备MAC</string>
+    <string name="settings_device_info_serial">设备序列号</string>
+    <string name="settings_device_info_vendor">设备厂商</string>
+    <string name="settings_device_info_model">设备型号</string>
+    <string name="settings_device_info_firmware">固件版本号</string>
+    <string name="settings_device_info_software">软件版本号</string>
+    <string name="settings_device_info_name_not_empty">设备名称不能为空</string>
 
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>

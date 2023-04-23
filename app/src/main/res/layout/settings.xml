@@ -112,7 +112,7 @@
                 android:paddingLeft="30dp">
 
                 <TextView
-                    android:id="@+id/settings_base_info"
+                    android:id="@+id/settings_device_info"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -120,7 +120,7 @@
                     android:drawableLeft="@mipmap/settings_setting"
                     android:drawablePadding="20dp"
                     android:gravity="center_vertical|left"
-                    android:text="@string/settings_base_info"
+                    android:text="@string/settings_device_info"
                     android:textColor="#333333"
                     android:textSize="25sp" />
 

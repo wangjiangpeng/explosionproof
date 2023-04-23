@@ -51,35 +51,6 @@ public class DataUtils {
         return value;
     }
 
-    public static String getDeviceID() {
-        BufferedReader bre = null;
-        File cpuInfo = new File("/proc/cpuinfo");
-        if (!cpuInfo.exists()) {
-            return null;
-        }
-        try {
-            bre = new BufferedReader(new FileReader(cpuInfo));
-            String lineInfo;
-            while ((lineInfo = bre.readLine()) != null) {
-                if (lineInfo.contains("Serial")) {
-                    String cpuSerial = lineInfo.substring(lineInfo.indexOf(":") + 2);
-                    return cpuSerial;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                bre.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        return null;
-    }
-
     public static String getTime(String format, long time) {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         return formatter.format(new Date(time));

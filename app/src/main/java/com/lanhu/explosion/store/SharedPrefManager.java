@@ -23,6 +23,7 @@ public class SharedPrefManager {
 
     private static final String PREF_NAME = "shared_manager";
     private static final String GAS_STANDARD = "gas_standard";
+    private static final String MAC = "mac";
 
     private SharedPreferences resultPref;
 
@@ -80,5 +81,14 @@ public class SharedPrefManager {
         return true;
     }
 
+    public void saveMac(String mac){
+        SharedPreferences.Editor editor = resultPref.edit();
+        editor.putString(MAC, mac);
+        editor.commit();
+    }
+
+    public String getMac(){
+        return resultPref.getString(MAC, null);
+    }
 
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lanhu.explosion.view.CommonView;
+import com.lanhu.explosion.view.DeviceInfoView;
 import com.lanhu.explosion.view.GasView;
 import com.lanhu.explosion.view.PictureView;
 import com.lanhu.explosion.view.RecordView;
@@ -41,6 +42,10 @@ public class SettingsActivity extends Activity {
 
         findViewById(R.id.settings_common).setOnClickListener(v -> {
             replaceConnectView(new CommonView(SettingsActivity.this));
+        });
+
+        findViewById(R.id.settings_device_info).setOnClickListener(v -> {
+            replaceConnectView(new DeviceInfoView(SettingsActivity.this));
         });
 
         replaceConnectView(new PictureView(SettingsActivity.this));
