@@ -40,7 +40,7 @@
     <string name="settings_collect">气体采集库</string>
     <string name="settings_device_info">设备基础配置</string>
     <string name="settings_server">服务器通讯配置</string>
-    <string name="settings_passeord">密码配置</string>
+    <string name="settings_password">密码配置</string>
     <string name="settings_net">网络设置</string>
     <string name="settings_common">通用</string>
     <string name="settings_upload_no">未上传</string>
