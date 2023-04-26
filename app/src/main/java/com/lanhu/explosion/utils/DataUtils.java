@@ -1,5 +1,7 @@
 package com.lanhu.explosion.utils;
 
+import android.text.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -58,6 +60,18 @@ public class DataUtils {
 
     public static String getTime(long time) {
         return getTime("yyyy-MM-dd HH:mm:ss", time);
+    }
+
+    public static String removeDoubleQuotes(String string) {
+        if (TextUtils.isEmpty(string)) {
+            return "";
+        }
+        int length = string.length();
+        if ((length > 1) && (string.charAt(0) == '"')
+                && (string.charAt(length - 1) == '"')) {
+            return string.substring(1, length - 1);
+        }
+        return string;
     }
 
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.lanhu.explosion.view.CommonView;
 import com.lanhu.explosion.view.DeviceInfoView;
 import com.lanhu.explosion.view.GasView;
+import com.lanhu.explosion.view.NetworkView;
 import com.lanhu.explosion.view.PasswordView;
 import com.lanhu.explosion.view.PictureView;
 import com.lanhu.explosion.view.RecordView;
@@ -56,6 +57,11 @@ public class SettingsActivity extends Activity {
 
         findViewById(R.id.settings_password).setOnClickListener(v -> {
             replaceConnectView(new PasswordView(SettingsActivity.this));
+        });
+
+
+        findViewById(R.id.settings_net).setOnClickListener(v -> {
+            replaceConnectView(new NetworkView(SettingsActivity.this));
         });
 
         replaceConnectView(new PictureView(SettingsActivity.this));

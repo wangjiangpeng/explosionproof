@@ -2,6 +2,9 @@
     <string name="app_name">鹰之眼</string>
 
     <string name="cancel">取消</string>
+    <string name="connect">连接</string>
+    <string name="disconnect">断开链接</string>
+    <string name="forget">取消保存</string>
     <string name="ok">确定</string>
 
     <string name="explosion_normal">正常</string>
@@ -75,6 +78,13 @@
     <string name="settings_server_addr">服务器地址</string>
     <string name="settings_server_addr_hint">请输入服务器地址</string>
     <string name="settings_server_addr_not_empty">服务器地址不能为空</string>
+
+    <string name="settings_network_wlan">无线局域网</string>
+    <string name="settings_network_eth">有线网络</string>
+    <string name="settings_network_net">网络</string>
+    <string name="settings_network_disconnect">断开</string>
+    <string name="settings_network_no_support">不支持该网络</string>
+    <string name="settings_network_save_fail">网络保存失败</string>
 
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>

@@ -31,4 +31,19 @@
         <item>2147483647</item>
     </string-array>
 
+    <string-array name="wifi_status">
+        <item msgid="1922181315419294640"></item>
+        <item msgid="8934131797783724664">"正在扫描..."</item>
+        <item msgid="8513729475867537913">"正在连接..."</item>
+        <item msgid="515055375277271756">"正在验证身份…"</item>
+        <item msgid="1943354004029184381">"正在获取IP地址..."</item>
+        <item msgid="4221763391123233270">"已连接"</item>
+        <item msgid="624838831631122137">"已暂停"</item>
+        <item msgid="7979680559596111948">"正在断开连接..."</item>
+        <item msgid="1634960474403853625">"已断开连接"</item>
+        <item msgid="746097431216080650">"失败"</item>
+        <item msgid="6367044185730295334">"已停用"</item>
+        <item msgid="503942654197908005">"暂时关闭（网络状况不佳）"</item>
+    </string-array>
+
 </resources>
