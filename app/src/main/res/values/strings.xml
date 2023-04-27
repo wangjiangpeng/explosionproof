@@ -23,6 +23,7 @@
     <string name="explosion_collect">气体采集</string>
     <string name="explosion_setting">设置</string>
     <string name="explosion_back">返回</string>
+    <string name="explosion_record_time">已录制: %s</string>
 
     <string name="comm_title">通讯</string>
     <string name="comm_just_now">刚刚</string>

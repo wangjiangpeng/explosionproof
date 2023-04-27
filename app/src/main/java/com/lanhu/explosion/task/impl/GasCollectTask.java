@@ -61,7 +61,7 @@ public class GasCollectTask extends ATask<Integer> {
         try {
             // todo pump machine
             while (process < 90) {
-                process += 5;
+                process += 1;
                 publishProgress(process);
                 Thread.sleep(1000);
             }
@@ -114,7 +114,6 @@ public class GasCollectTask extends ATask<Integer> {
                         while (true) {
                             byte[] data = port.receiver();
                             if (data != null) {
-                                Log.e("WJP", "data");
                                 System.arraycopy(data, 0, buffer, pos, data.length);
                                 pos += data.length;
                             }

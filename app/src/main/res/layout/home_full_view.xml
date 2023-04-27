@@ -4,14 +4,46 @@
     android:layout_height="match_parent"
     android:background="@mipmap/explosion_full_bg">
 
+    <TextureView
+        android:id="@+id/home_full_grid_gas_tv"
+        android:layout_width="1px"
+        android:layout_height="1px" />
 
-    <GridView
-        android:id="@+id/home_full_grid_gas"
-        android:layout_width="500dp"
+    <TextView
+        android:id="@+id/home_view_record_time"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="27dp"
-        android:layout_marginTop="10dp"
-        android:numColumns="4"></GridView>
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="45dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="13"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <com.lanhu.explosion.widget.GasRecyclerView
+                android:id="@+id/home_full_grid_gas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="76" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/home_full_status"
@@ -41,6 +73,7 @@
             android:background="@mipmap/cycle_btn_bg" />
 
         <TextView
+            android:id="@+id/home_view_record_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

@@ -172,4 +172,13 @@ public class GasItem extends BaseInfo {
     }
 
     public static ArrayList<GasItem> mList = new ArrayList<>();
+
+    public static boolean isAllStatusOK(){
+        for(GasItem item : mList){
+            if(!item.isDisable() && item.getStatus() != STATUS_OK){
+                return false;
+            }
+        }
+        return true;
+    }
 }

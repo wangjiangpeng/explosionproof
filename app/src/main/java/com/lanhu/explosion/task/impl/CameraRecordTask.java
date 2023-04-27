@@ -18,7 +18,7 @@ import com.lanhu.explosion.utils.FileUtils;
 
 import java.io.File;
 
-public class CameraRecordTask extends ATask {
+public class CameraRecordTask extends ATask<Long> {
 
     private static final String TAG = "CameraRecordTask";
     private static final int MIN_TIME = 5000;
@@ -38,7 +38,6 @@ public class CameraRecordTask extends ATask {
         mStartTime = SystemClock.elapsedRealtime();
     }
 
-
     @Override
     protected void onPostExecute(Object result) {
         boolean suc = (boolean) result;
@@ -56,11 +55,14 @@ public class CameraRecordTask extends ATask {
             return false;
 
         } else {
+            TimeThread timeThread = new TimeThread();
+            timeThread.start();
             mMediaWrapper.setSavePath(mediaFile.getAbsolutePath());
             mMediaWrapper.setRtmpUrl(url);
             mMediaWrapper.setVideoSize(width, height);
             mMediaWrapper.startRecord();
             mMediaWrapper.waitStop();
+            timeThread.running = false;
 
             if (mMediaWrapper.isVideoError()) {
                 if (mediaFile.exists()) {
@@ -84,6 +86,28 @@ public class CameraRecordTask extends ATask {
 
     public boolean isStopping() {
         return mStopThread != null;
+    }
+
+    private class TimeThread extends Thread {
+
+        boolean running = true;
+
+        @Override
+        public void run() {
+            super.run();
+
+            long starTime = SystemClock.elapsedRealtime();
+            while(running){
+                long diff = SystemClock.elapsedRealtime() - starTime;
+                publishProgress(diff);
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private class StopThread extends Thread {

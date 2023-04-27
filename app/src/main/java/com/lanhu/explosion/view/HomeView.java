@@ -28,6 +28,7 @@ import com.lanhu.explosion.bean.GasItem;
 import com.lanhu.explosion.misc.MToast;
 import com.lanhu.explosion.task.ATask;
 import com.lanhu.explosion.task.TaskCallback;
+import com.lanhu.explosion.task.TaskProgress;
 import com.lanhu.explosion.task.TaskService;
 import com.lanhu.explosion.task.impl.CameraPictureTask;
 import com.lanhu.explosion.task.impl.CameraRecordTask;
@@ -35,6 +36,7 @@ import com.lanhu.explosion.task.impl.GasCollectTask;
 import com.lanhu.explosion.utils.ButtonUtils;
 import com.lanhu.explosion.utils.DataUtils;
 import com.lanhu.explosion.utils.MemUtils;
+import com.lanhu.explosion.widget.GasRecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,12 +46,11 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
     TextView mMemTV;
     TextView mStatusTV;
-    RecyclerView mGasRV;
+    GasRecyclerView mGasRV;
     RecyclerView mSettingsRV;
     TextureView sv;
     Button mRecordBtn;
     TextView mRecordTV;
-    GasRecyclerAdapter mAdapter;
 
     CameraRecordTask mCameraRecordTask;
     CameraPictureTask mCameraPictureTask;
@@ -117,10 +118,6 @@ public class HomeView extends LinearLayout implements TaskCallback {
         mCameraPictureTask = TaskService.getInstance().getTask(CameraPictureTask.class);
         mCameraPictureTask.setTaskCallback(this);
 
-        GridLayoutManager gasManager = new GridLayoutManager(getContext(), 4, RecyclerView.VERTICAL, false);
-        mGasRV.setAdapter(mAdapter = new GasRecyclerAdapter());
-        mGasRV.setLayoutManager(gasManager);
-
         GridLayoutManager settingsManager = new GridLayoutManager(getContext(), mSetItems.length, RecyclerView.VERTICAL, false);
         mSettingsRV.setAdapter(new SettingsRecyclerAdapter());
         mSettingsRV.setLayoutManager(settingsManager);
@@ -132,9 +129,20 @@ public class HomeView extends LinearLayout implements TaskCallback {
 
         String sizeStr = DataUtils.getSizeName(MemUtils.getAvailableSize("/data"));
         mMemTV.setText(getContext().getString(R.string.explosion_mem, sizeStr));
-        mStatusTV.setText("正常");
+        updateGasView();
 
         TaskService.getInstance().getTask(GasCollectTask.class).setTaskCallback(this);
+    }
+
+    private void updateGasView(){
+        if(GasItem.isAllStatusOK()){
+            mStatusTV.setTextColor(getResources().getColor(R.color.depth_blue, null));
+            mStatusTV.setText(R.string.explosion_normal);
+        } else {
+            mStatusTV.setTextColor(getResources().getColor(R.color.red, null));
+            mStatusTV.setText(R.string.explosion_warn);
+        }
+        mGasRV.notifyDataSetChanged();
     }
 
     @Override
@@ -142,61 +150,8 @@ public class HomeView extends LinearLayout implements TaskCallback {
         if (task instanceof GasCollectTask) {
             boolean suc = (boolean) result;
             if (suc) {
-                mAdapter.notifyDataSetChanged();
+                updateGasView();
             }
-        }
-    }
-
-    private class GasVH extends RecyclerView.ViewHolder {
-
-        ImageView icon;
-        TextView name;
-        TextView value;
-        TextView status;
-        TextView data;
-
-        public GasVH(View itemView) {
-            super(itemView);
-
-            icon = itemView.findViewById(R.id.explosion_item_gas_icon);
-            name = itemView.findViewById(R.id.explosion_item_gas_name);
-            value = itemView.findViewById(R.id.explosion_item_gas_value);
-            status = itemView.findViewById(R.id.explosion_item_gas_status);
-            data = itemView.findViewById(R.id.explosion_item_gas_date);
-        }
-    }
-
-    private class GasRecyclerAdapter extends RecyclerView.Adapter<GasVH> {
-
-        GasRecyclerAdapter() {
-        }
-
-        @Override
-        public GasVH onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new GasVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.explosion_item_gas, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(GasVH holder, int position) {
-            GasItem item = GasItem.mList.get(position);
-            holder.icon.setImageResource(item.getIconId());
-            holder.name.setText(item.getNameId());
-            holder.value.setText(String.valueOf(item.getValueUnit()));
-            if (item.getStatus() == GasItem.STATUS_OK) {
-                holder.status.setTextColor(getResources().getColor(R.color.green, null));
-                holder.status.setText(R.string.explosion_qualified);
-            } else {
-                holder.status.setTextColor(getResources().getColor(R.color.red, null));
-                holder.status.setText(R.string.explosion_warn);
-            }
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            holder.data.setText(dateFormat.format(new Date(item.getTime())));
-        }
-
-        @Override
-        public int getItemCount() {
-            return GasItem.mList.size();
         }
     }
 
