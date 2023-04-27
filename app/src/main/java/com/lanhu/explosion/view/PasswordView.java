@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -12,8 +14,13 @@ import android.widget.Toast;
 
 import com.lanhu.explosion.R;
 import com.lanhu.explosion.misc.MToast;
+import com.lanhu.explosion.utils.LockPatternUtils;
+
+import ZtlApi.ZtlManager;
 
 public class PasswordView extends FrameLayout {
+
+    private EditText mCurrentET, mNewET, mAgainET;
 
     public PasswordView(Context context) {
         super(context);
@@ -37,6 +44,19 @@ public class PasswordView extends FrameLayout {
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.password_view, this, true);
+        mCurrentET = findViewById(R.id.password_view_current_edit);
+        mNewET = findViewById(R.id.password_view_new_edit);
+        mAgainET = findViewById(R.id.password_view_again_edit);
+
+        LockPatternUtils.mo();
+
+        findViewById(R.id.password_view_again_confirm).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ZtlManager.GetInstance().setContext(getContext());
+                ZtlManager.GetInstance().lockScreenSettings(true, "123456");
+            }
+        });
     }
 
     public void showDialog(String title, TextView tv) {

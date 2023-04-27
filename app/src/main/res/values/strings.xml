@@ -99,6 +99,11 @@
     <string name="settings_network_ip_gateway">网关</string>
     <string name="settings_network_ip_dns">DNS地址</string>
 
+    <string name="settings_password_current_password">当前密码</string>
+    <string name="settings_password_new_password">修改密码</string>
+    <string name="settings_password_again_password">再次输入密码</string>
+    <string name="settings_password_confirm">确认修改</string>
+
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>
     <string name="toast_record_busy">正在关闭录像,请五秒后再试</string>
