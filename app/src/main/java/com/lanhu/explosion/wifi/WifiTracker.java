@@ -156,6 +156,7 @@ public class WifiTracker {
                 mWifiListener.onStateChange();
             } else if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
                 updateNetworkInfo(null);
+                mWifiListener.onNetworkChange();
 //            } else if (WifiManager.CONFIGURED_NETWORKS_CHANGED_ACTION.equals(action){
             } else if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
                 NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
@@ -170,8 +171,30 @@ public class WifiTracker {
     }
 
 
-    private static Method getCurrentNetworkMode;
+    private static Method getIpAssignmentMode;
+    public static boolean isStaticIp(WifiConfiguration config) {
+        try {
+            if (getIpAssignmentMode == null) {
+                getIpAssignmentMode = WifiConfiguration.class.getMethod("getIpAssignment");
+            }
+            Object ipAssignmentStatic = getEnumValue("android.net.IpConfiguration$IpAssignment", "STATIC");
+            Object ipAssignment = getIpAssignmentMode.invoke(config);
+            if(ipAssignmentStatic == ipAssignment){
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    private static Object getEnumValue(String enumClassName, String enumValue) throws ClassNotFoundException
+    {
+        Class<Enum> enumClz = (Class<Enum>)Class.forName(enumClassName);
+        return Enum.valueOf(enumClz, enumValue);
+    }
+
+    private static Method getCurrentNetworkMode;
     public static Network getCurrentNetwork(WifiManager wifiManager) {
         try {
             if (getCurrentNetworkMode == null) {
@@ -183,4 +206,47 @@ public class WifiTracker {
         }
         return null;
     }
+
+    private static Method connectMethod;
+    public static Network connect(WifiManager wifiManager, WifiConfiguration config) {
+        try {
+            if (connectMethod == null) {
+                Class ActionListener = Class.forName("android.net.wifi.WifiManager$ActionListener");
+                connectMethod = WifiManager.class.getMethod("connect", WifiConfiguration.class, ActionListener);
+            }
+            return (Network) connectMethod.invoke(wifiManager, config, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Method saveMethod;
+    public static Network save(WifiManager wifiManager, WifiConfiguration config) {
+        try {
+            if (saveMethod == null) {
+                Class ActionListener = Class.forName("android.net.wifi.WifiManager$ActionListener");
+                saveMethod = WifiManager.class.getMethod("save", WifiConfiguration.class, ActionListener);
+            }
+            return (Network) saveMethod.invoke(wifiManager, config, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Method forgetMethod;
+    public static Network forget(WifiManager wifiManager, int networkId) {
+        try {
+            if (forgetMethod == null) {
+                Class ActionListener = Class.forName("android.net.wifi.WifiManager$ActionListener");
+                forgetMethod = WifiManager.class.getMethod("forget", int.class, ActionListener);
+            }
+            return (Network) forgetMethod.invoke(wifiManager, networkId, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

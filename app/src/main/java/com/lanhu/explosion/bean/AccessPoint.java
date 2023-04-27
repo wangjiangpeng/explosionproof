@@ -5,12 +5,10 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
-import android.util.Log;
 
 import com.lanhu.explosion.R;
 import com.lanhu.explosion.utils.DataUtils;
 
-import java.util.List;
 
 public class AccessPoint {
 
@@ -45,12 +43,12 @@ public class AccessPoint {
     }
 
     public void loadConfiguration(WifiConfiguration configuration){
-//        if(configuration != null){
-//            if(result.SSID != null && result.SSID.equals(DataUtils.removeDoubleQuotes(configuration.SSID))){
-//                this.configuration = configuration;
+        if(configuration != null){
+            if(result.SSID != null && result.SSID.equals(DataUtils.removeDoubleQuotes(configuration.SSID))){
+                this.configuration = configuration;
 //                networkId = configuration.networkId;
-//            }
-//        }
+            }
+        }
     }
 
     public boolean isSaved() {

@@ -46,4 +46,9 @@
         <item msgid="503942654197908005">"暂时关闭（网络状况不佳）"</item>
     </string-array>
 
+    <string-array name="network_ip_type">
+    <item>"静态"</item>
+    <item>"自动"</item>
+    </string-array>
+
 </resources>

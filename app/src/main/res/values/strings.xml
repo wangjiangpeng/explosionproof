@@ -45,6 +45,7 @@
     <string name="settings_server">服务器通讯配置</string>
     <string name="settings_password">密码配置</string>
     <string name="settings_net">网络设置</string>
+    <string name="settings_save">保存</string>
     <string name="settings_common">通用</string>
     <string name="settings_upload_no">未上传</string>
     <string name="settings_upload_ing">上传中</string>
@@ -85,6 +86,18 @@
     <string name="settings_network_disconnect">断开</string>
     <string name="settings_network_no_support">不支持该网络</string>
     <string name="settings_network_save_fail">网络保存失败</string>
+    <string name="settings_network_connect">已连接</string>
+    <string name="settings_network_no_connect">未连接</string>
+    <string name="settings_network_config">网络配置</string>
+    <string name="settings_network_forget">忽略此网络</string>
+    <string name="settings_network_ipv4">IPV4地址</string>
+    <string name="settings_network_ip_type">配置ip</string>
+    <string name="settings_network_ip_static">静态</string>
+    <string name="settings_network_ip_dhcp">自动</string>
+    <string name="settings_network_ip_address">IP地址</string>
+    <string name="settings_network_ip_netmask">子网掩码</string>
+    <string name="settings_network_ip_gateway">网关</string>
+    <string name="settings_network_ip_dns">DNS地址</string>
 
     <string name="toast_record_finish">录像完成</string>
     <string name="toast_record_err">录像失败,请稍后再试</string>

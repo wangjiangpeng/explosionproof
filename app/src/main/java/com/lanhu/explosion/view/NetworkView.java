@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 //import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lanhu.explosion.R;
+import com.lanhu.explosion.SettingsActivity;
 import com.lanhu.explosion.bean.AccessPoint;
 import com.lanhu.explosion.misc.MToast;
 import com.lanhu.explosion.wifi.WifiTracker;
@@ -48,7 +51,7 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
     private static final int SIGNAL_LEVELS = 4;
 
     private WifiManager mWifiManager;
-    //    private ConnectivityManager mConnectivityManager;
+        private ConnectivityManager mConnectivityManager;
 //    private NetworkInfo mLastNetworkInfo;
 //    private WifiInfo mLastInfo;
 //    private ScanResult mScanResult;
@@ -60,6 +63,7 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
     private Switch mWifiS;
     private ListView mWifiLV;
     private View mConnectLayout;
+    private TextView mEthStateTV;
     private ViewAdapter mAdapter;
 
     public NetworkView(Context context) {
@@ -87,9 +91,10 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
         mWifiS = findViewById(R.id.network_view_wifi_switch);
         mWifiLV = findViewById(R.id.network_view_list);
         mConnectLayout = findViewById(R.id.network_view_wifi_connect);
+        mEthStateTV = findViewById(R.id.settings_network_eth_status);
 
         mWifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
-//        mConnectivityManager = context.getSystemService(ConnectivityManager.class);
+        mConnectivityManager = context.getSystemService(ConnectivityManager.class);
         mScanner = new Scanner();
         mAdapter = new ViewAdapter();
         mWifiLV.setAdapter(mAdapter);
@@ -98,6 +103,14 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
         mWifiTracker.setListener(this);
 
         mConnectLayout.setVisibility(View.GONE);
+
+        NetworkInfo ethInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
+        if(ethInfo != null && ethInfo.isConnected()){
+            mEthStateTV.setText(R.string.settings_network_connect);
+        } else {
+            mEthStateTV.setTextColor(getContext().getColor(R.color.gray));
+            mEthStateTV.setText(R.string.settings_network_no_connect);
+        }
 
         mWifiS.setOnClickListener(new OnClickListener() {
             @Override
@@ -116,20 +129,19 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
                     AccessPoint ap = (AccessPoint) obj;
                     if (ap.isSaved()) {
                         if (!ap.isConnect()) {
-                            connect(mWifiManager, ap.configuration);
+                            WifiTracker.connect(mWifiManager, ap.configuration);
                         } else {
                             showDisconnectDialog(ap);
                         }
                     } else {
                         if(ap.getSecurity() == SECURITY_NONE){
                             WifiConfiguration config = createWifiInfo(ap.result.SSID, "", ap);
-                            Network net = save(mWifiManager, config);
+                            Network net = WifiTracker.save(mWifiManager, config);
                             if(net == null){
                                 MToast.makeText(R.string.settings_network_save_fail, Toast.LENGTH_SHORT).show();
                             } else {
-                                connect(mWifiManager, config);
+                                WifiTracker.connect(mWifiManager, config);
                             }
-
                         } else {
                             showConnectDialog(ap);
                         }
@@ -139,25 +151,27 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
         });
 
 
-        mConnectLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AccessPoint ap = mWifiTracker.getConnectAccessPoint();
-                showDisconnectDialog(ap);
-            }
-        });
+//        mConnectLayout.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AccessPoint ap = mWifiTracker.getConnectAccessPoint();
+//                showDisconnectDialog(ap);
+//            }
+//        });
+
+//        findViewById(R.id.network_view_eth).setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ((SettingsActivity)getContext()).replaceNetConfig();
+//            }
+//        });
     }
 
     private void showDisconnectDialog(AccessPoint ap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(ap.result.SSID);
-        builder.setPositiveButton(R.string.disconnect, (d, w) -> {
-            mWifiManager.disconnect();
-            d.cancel();
-        });
-
         builder.setNegativeButton(R.string.forget, (d, w) -> {
-            forget(mWifiManager, ap.getNetworkId());
+            WifiTracker.forget(mWifiManager, ap.getNetworkId());
             d.cancel();
         });
         builder.show();
@@ -172,12 +186,12 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
             String str = edit.getText().toString();
             if(ap.getSecurity() == SECURITY_WEP || ap.getSecurity() == SECURITY_PSK || ap.getSecurity() == SECURITY_NONE){
                 WifiConfiguration config = createWifiInfo(ap.result.SSID, str, ap);
-                Network net = save(mWifiManager, config);
-                if(net == null){
-                    MToast.makeText(R.string.settings_network_save_fail, Toast.LENGTH_SHORT).show();
-                } else {
-                    connect(mWifiManager, config);
-                }
+                WifiTracker.save(mWifiManager, config);
+//                if(net == null){
+//                    MToast.makeText(R.string.settings_network_save_fail, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    WifiTracker.connect(mWifiManager, config);
+//                }
             } else {
                 MToast.makeText(R.string.settings_network_no_support, Toast.LENGTH_SHORT).show();
             }
@@ -286,6 +300,7 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
             ImageView security = (ImageView) view.findViewById(R.id.network_item_security);
             ImageView signal = (ImageView) view.findViewById(R.id.network_item_signal);
             TextView stateTV = (TextView) view.findViewById(R.id.network_item_state);
+            TextView config = (TextView) view.findViewById(R.id.network_item_config);
             name.setText(item.result.SSID);
             signal.setImageLevel(getLevel(item.result.level));
             if (item.getSecurity() == AccessPoint.SECURITY_NONE) {
@@ -294,6 +309,17 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
                 security.setVisibility(View.VISIBLE);
             }
             stateTV.setText(item.getSummary());
+            if(item.isConnect()){
+                config.setVisibility(VISIBLE);
+            } else {
+                config.setVisibility(GONE);
+            }
+            config.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((SettingsActivity)getContext()).replaceConnectView(new EthView(getContext(), item));
+                }
+            });
         }
     }
 
@@ -319,18 +345,6 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
             mConnectLayout.setVisibility(GONE);
         }
     }
-
-//    public void showDialog(String ssid) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        builder.setTitle(ssid);
-//        builder.setPositiveButton(R.string.cancel, (d, w) -> {
-//            d.cancel();
-//        });
-//        ListView lv = new ListView(getContext());
-//        lv.setDivider(new ColorDrawable(Color.TRANSPARENT));
-//        lv.setAdapter(new CommonView.ViewAdapter());
-//        builder.setView(lv);
-//    }
 
     class Scanner extends Handler {
         static final int MSG_SCAN = 0;
@@ -402,46 +416,5 @@ public class NetworkView extends FrameLayout implements WifiTracker.WifiListener
         return WifiManager.calculateSignalLevel(rsii, SIGNAL_LEVELS);
     }
 
-    private static Method connectMethod;
-    public static Network connect(WifiManager wifiManager, WifiConfiguration config) {
-        try {
-            if (connectMethod == null) {
-                Class ActionListener = Class.forName("android.net.wifi.WifiManager$ActionListener");
-                connectMethod = WifiManager.class.getMethod("connect", WifiConfiguration.class, ActionListener);
-            }
-            return (Network) connectMethod.invoke(wifiManager, config, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static Method saveMethod;
-    public static Network save(WifiManager wifiManager, WifiConfiguration config) {
-        try {
-            if (saveMethod == null) {
-                Class ActionListener = Class.forName("android.net.wifi.WifiManager$ActionListener");
-                saveMethod = WifiManager.class.getMethod("save", WifiConfiguration.class, ActionListener);
-            }
-            return (Network) saveMethod.invoke(wifiManager, config, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static Method forgetMethod;
-    public static Network forget(WifiManager wifiManager, int networkId) {
-        try {
-            if (forgetMethod == null) {
-                Class ActionListener = Class.forName("android.net.wifi.WifiManager$ActionListener");
-                forgetMethod = WifiManager.class.getMethod("forget", int.class, ActionListener);
-            }
-            return (Network) forgetMethod.invoke(wifiManager, networkId, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 }

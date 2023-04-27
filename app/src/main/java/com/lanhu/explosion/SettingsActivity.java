@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lanhu.explosion.bean.AccessPoint;
 import com.lanhu.explosion.view.CommonView;
 import com.lanhu.explosion.view.DeviceInfoView;
+import com.lanhu.explosion.view.EthView;
 import com.lanhu.explosion.view.GasView;
 import com.lanhu.explosion.view.NetworkView;
 import com.lanhu.explosion.view.PasswordView;
@@ -67,7 +69,7 @@ public class SettingsActivity extends Activity {
         replaceConnectView(new PictureView(SettingsActivity.this));
     }
 
-    private void replaceConnectView(View view) {
+    public void replaceConnectView(View view) {
         mCurrentLayout.removeAllViews();
         mCurrentLayout.addView(view);
     }
