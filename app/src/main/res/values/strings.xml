@@ -67,6 +67,8 @@
     <string name="settings_common_light">亮度</string>
     <string name="settings_common_music">声音</string>
     <string name="settings_common_sleep">休眠</string>
+    <string name="settings_common_boot_start">开机自启</string>
+    <string name="settings_common_system_bar">显示导航栏与状态栏</string>
 
     <string name="settings_device_info_name">设备名称</string>
     <string name="settings_device_info_mac">设备MAC</string>

@@ -25,165 +25,225 @@
         android:layout_height="1px"
         android:background="@color/line" />
 
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="92"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/round"
-            android:padding="20dp">
-
-            <TextView
-                android:id="@+id/settings_common_screen_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_common_screen"
-                android:textColor="#333333"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/settings_common_screen_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/settings_common_screen_title"
-                android:layout_marginTop="20dp"
-                android:text="@string/settings_common_screen_hint"
-                android:textColor="#999999"
-                android:textSize="9sp" />
-
-            <TextView
-                android:id="@+id/settings_common_screen_current"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/settings_common_screen_hint"
-                android:layout_alignLeft="@+id/settings_common_screen_hint"
-                android:layout_alignRight="@+id/settings_common_screen_hint"
-                android:layout_marginTop="13dp"
-                android:padding="12dp"
-                android:background="@drawable/border_gray"
-                android:textColor="#999999"
-                android:textSize="8sp" />
-
-            <ImageView
-                android:layout_alignTop="@+id/settings_common_screen_current"
-                android:layout_alignBottom="@+id/settings_common_screen_current"
-                android:layout_alignRight="@+id/settings_common_screen_current"
-                android:layout_marginRight="12dp"
-                android:src="@mipmap/pull_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
+        android:layout_weight="92">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/round"
+            android:layout_height="0dp"
+            android:layout_weight="92"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_common_light"
-                android:textColor="#333333"
-                android:textSize="13sp" />
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/round"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/settings_common_screen_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_common_screen"
+                    android:textColor="#333333"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/settings_common_screen_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_common_screen_title"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/settings_common_screen_hint"
+                    android:textColor="#999999"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/settings_common_screen_current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_common_screen_hint"
+                    android:layout_alignLeft="@+id/settings_common_screen_hint"
+                    android:layout_alignRight="@+id/settings_common_screen_hint"
+                    android:layout_marginTop="13dp"
+                    android:background="@drawable/border_gray"
+                    android:padding="12dp"
+                    android:textColor="#999999"
+                    android:textSize="8sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/settings_common_screen_current"
+                    android:layout_alignRight="@+id/settings_common_screen_current"
+                    android:layout_alignBottom="@+id/settings_common_screen_current"
+                    android:layout_marginRight="12dp"
+                    android:src="@mipmap/pull_down" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/round"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@mipmap/light" />
-
-                <SeekBar
-                    android:id="@+id/settings_common_light"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:maxHeight="5dp"
-                    android:minHeight="5dp"
-                    android:progressDrawable="@drawable/progress_color_horizontal"
-                    android:splitTrack="false"
-                    android:thumb="@mipmap/cycle" />
+                    android:text="@string/settings_common_light"
+                    android:textColor="#333333"
+                    android:textSize="13sp" />
 
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@mipmap/light" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@mipmap/light" />
+
+                    <SeekBar
+                        android:id="@+id/settings_common_light"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:maxHeight="5dp"
+                        android:minHeight="5dp"
+                        android:progressDrawable="@drawable/progress_color_horizontal"
+                        android:splitTrack="false"
+                        android:thumb="@mipmap/cycle" />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@mipmap/light" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/round"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_common_music"
+                    android:textColor="#333333"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@mipmap/sound_forbid" />
+
+                    <SeekBar
+                        android:id="@+id/settings_common_sound"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:maxHeight="5dp"
+                        android:minHeight="5dp"
+                        android:progressDrawable="@drawable/progress_color_horizontal"
+                        android:splitTrack="false"
+                        android:thumb="@mipmap/cycle" />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@mipmap/sound_open" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/round"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_common_boot_start"
+                    android:textColor="#333333"
+                    android:textSize="13sp" />
+
+                <Switch
+                    android:id="@+id/settings_common_boot_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:track="@drawable/switch_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/round"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_common_system_bar"
+                    android:textColor="#333333"
+                    android:textSize="13sp" />
+
+                <Switch
+                    android:id="@+id/settings_common_system_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:track="@drawable/switch_bg" />
 
             </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/round"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_common_music"
-                android:textColor="#333333"
-                android:textSize="13sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@mipmap/sound_forbid" />
-
-                <SeekBar
-                    android:id="@+id/settings_common_sound"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:maxHeight="5dp"
-                    android:minHeight="5dp"
-                    android:progressDrawable="@drawable/progress_color_horizontal"
-                    android:splitTrack="false"
-                    android:thumb="@mipmap/cycle" />
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@mipmap/sound_open" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

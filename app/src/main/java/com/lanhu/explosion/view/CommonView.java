@@ -14,12 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.lanhu.explosion.R;
+
+import ZtlApi.ZtlManager;
 
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS;
 import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
@@ -56,19 +60,45 @@ public class CommonView extends FrameLayout {
         mTimeoutTV = findViewById(R.id.settings_common_screen_current);
         mLightSB = findViewById(R.id.settings_common_light);
         mSoundSB = findViewById(R.id.settings_common_sound);
+        Switch bootStart = findViewById(R.id.settings_common_boot_start);
+        Switch systemBar = findViewById(R.id.settings_common_system_bar);
 
         entries = getResources().getTextArray(R.array.screen_timeout_entries);
         values = getResources().getTextArray(R.array.screen_timeout_values);
 
-
         mLightSB.setMax(255);
+        if(getContext().getPackageName().equals(ZtlManager.GetInstance().getBootPackageName())){
+            bootStart.setChecked(true);
+        } else {
+            bootStart.setChecked(false);
+        }
+        systemBar.setChecked(ZtlManager.GetInstance().isSystemBarOpen());
 
         mAudioManager = (AudioManager)getContext().getSystemService(Context.AUDIO_SERVICE);
         int soundMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         mSoundSB.setMax(soundMax);
+        ZtlManager.GetInstance().setContext(getContext());
 
         mTimeoutTV.setOnClickListener(v -> {
             showDialog();
+        });
+
+        bootStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    ZtlManager.GetInstance().setBootPackageActivity(getContext().getPackageName(),getContext().getPackageName() +".MainActivity");
+                } else {
+                    ZtlManager.GetInstance().setBootPackageActivity("", "");
+                }
+            }
+        });
+
+        systemBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ZtlManager.GetInstance().openSystemBar(isChecked);
+            }
         });
 
         mLightSB.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
